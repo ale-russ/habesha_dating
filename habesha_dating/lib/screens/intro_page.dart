@@ -24,7 +24,7 @@ class IntroPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    invalidateForm(ref);
+    // invalidateForm(ref);
     return Scaffold(
       body: Stack(
         children: [

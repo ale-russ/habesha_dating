@@ -5,6 +5,7 @@ import '/screens/auth_screens/login_page.dart';
 import '/screens/auth_screens/signup_page.dart';
 import '/screens/intro_page.dart';
 import '/widgets/logo.dart';
+import "/screens/home/home.dart";
 
 final router = GoRouter(routes: <RouteBase>[
   GoRoute(
@@ -27,4 +28,7 @@ final router = GoRouter(routes: <RouteBase>[
       return LoginPage();
     },
   ),
+  GoRoute(
+      path: "/home",
+      builder: (BuildContext context, GoRouterState state) => const HomePage())
 ]);

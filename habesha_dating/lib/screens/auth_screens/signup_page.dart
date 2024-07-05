@@ -20,6 +20,8 @@ class SignupPage extends ConsumerWidget {
     super.key,
   });
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   TextEditingController? emailController = TextEditingController();
   TextEditingController? passwordController = TextEditingController();
   TextEditingController? confirmPasswordController = TextEditingController();
@@ -30,6 +32,7 @@ class SignupPage extends ConsumerWidget {
     final themeMode = ref.watch(themeProvider);
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: themeMode == ThemeMode.dark
           ? AppColors.darkAddIconBorderColor
           : AppColors.secondaryLight,
@@ -81,8 +84,12 @@ class SignupPage extends ConsumerWidget {
                       emailController!.text,
                       passwordController!.text,
                       nameController!.text);
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("User Successfully Registered")));
                 } catch (err) {
                   log('Error: $err');
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(err.toString())));
                 }
               },
               onTap: () {},

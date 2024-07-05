@@ -38,11 +38,11 @@ class AuthService {
         return datingUserFromJson(response.body);
       } else {
         log("Response: ${response.body}");
-        throw Exception("Failed To Register");
+        throw Exception(jsonDecode(response.body)['msg']);
       }
     } catch (err) {
       log('Error: $err');
-      throw Exception("Failed To Register");
+      rethrow;
     }
   }
 }

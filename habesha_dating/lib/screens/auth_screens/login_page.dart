@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:habesha_dating/models/user_model.dart';
 import 'package:habesha_dating/providers/auth/auth_provider.dart';
 
@@ -67,10 +68,13 @@ class LoginPage extends ConsumerWidget {
               onButtonTap: () async {
                 DatingUser? user;
                 try {
-                  await ref.read(userProvider.notifier).login(
+                  await ref
+                      .read(userProvider.notifier)
+                      .login(
                         emailController!.text,
                         passwordController!.text,
-                      );
+                      )
+                      .then((_) => context.go("/home"));
                 } catch (err) {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text(err.toString())));
