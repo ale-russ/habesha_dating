@@ -26,6 +26,7 @@ class AppColors {
   static const passwordBorderDarkColor = Color(0XFF595E5C);
   static const socialDarkBorderColors = Color(0XFFA8B0AF);
   static const headingDarkColor = Color(0XFFFFFFFF);
+  static const borderDarkColor = Color(0XFF4B9289);
 
   static const orLabelColor = Color(0XFF797C7B);
 
@@ -45,8 +46,10 @@ class AppColors {
   static const mediumLightPollColor = Color(0XFF8DEEE2);
   static const lightPollColor = Color(0XFFE0EBE9);
 
+  static const borderLightColor = Color(0XFF363F3B);
+
 // Gradients
   static const Color gradientStartColor = Color(0xFF43116A); // Bottom color
   static const Color gradientEndColor =
-      Color(0xFF0A1832); // Top right colorop right color
+      Color(0xFF0A1832); // Top right color right color
 }

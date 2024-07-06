@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:habesha_dating/helpers/toggle_button.dart';
+import 'package:habesha_dating/widgets/common/toggle_button.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../themes/app_colors.dart';
