@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/user_model.dart';
 import '../../repositories/auth_repository.dart';
@@ -15,11 +16,27 @@ class UserNotifier extends StateNotifier<DatingUser?> {
 
   final Ref _ref;
 
+  bool isLoggedIn = false;
+
+  Future<void> _loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString("userID");
+    final token = prefs.getString("token");
+    final userEmail = prefs.getString("userEmail");
+    isLoggedIn = (prefs.getBool("isLoggedIn"))!;
+
+    if (userId == null && token != null && userEmail != null) {
+      state = DatingUser(
+          msg: "", userId: userId, token: token, userEmail: userEmail);
+    }
+  }
+
   Future<void> login(String email, String password) async {
     try {
       final user =
           await _ref.read(authRepositoryProvider).login(email, password);
       state = user;
+      _loadUser();
       log('User: ${user.msg}');
     } catch (err) {
       log('AUTH ERROR: $err');
@@ -40,7 +57,12 @@ class UserNotifier extends StateNotifier<DatingUser?> {
     }
   }
 
-  void logout() {
+  void logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("userID");
+    prefs.remove("token");
+    prefs.remove("userEmail");
+    prefs.setBool("isLoggedIn", false);
     state = null;
   }
 }

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habesha_dating/providers/auth/auth_provider.dart';
 
-import '../../providers/form_validation_provider.dart';
+import '../../providers/auth/form_validation_provider.dart';
 import '/widgets/auth_widgets/auth_heading.dart';
-import '../../providers/theme_provider.dart';
+import '../../providers/theme/theme_provider.dart';
 import '/widgets/common/custom_appbar.dart';
 import '/widgets/common/custom_text_field.dart';
 import '/widgets/auth_widgets/login_button.dart';

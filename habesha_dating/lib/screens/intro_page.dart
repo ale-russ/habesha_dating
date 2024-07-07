@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../providers/form_validation_provider.dart';
+import '../providers/auth/form_validation_provider.dart';
 import '../widgets/or_spacer.dart';
 import '../widgets/auth_widgets/login_button.dart';
 import '../widgets/auth_widgets/social_icons.dart';

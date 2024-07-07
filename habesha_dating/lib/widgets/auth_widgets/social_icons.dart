@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habesha_dating/themes/app_colors.dart';
 
-import '../../providers/theme_provider.dart';
+import '../../providers/theme/theme_provider.dart';
 
 class SocialIcons extends ConsumerWidget {
   const SocialIcons({super.key});
