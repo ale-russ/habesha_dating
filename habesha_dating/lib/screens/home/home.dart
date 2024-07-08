@@ -63,7 +63,7 @@ class HomePage extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          OnlineContacts(),
+          // OnlineContacts(),
         ],
       ),
       bottomNavigationBar: Container(

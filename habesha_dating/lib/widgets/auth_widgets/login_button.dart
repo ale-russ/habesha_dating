@@ -1,4 +1,4 @@
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,12 +33,10 @@ class LoginButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    log('isLogin: $isLogin');
     final themeMode = ref.watch(themeProvider);
     final isFormValid = isLogin
         ? ref.watch(isLoginFormValidProvider)
         : ref.watch(isFormValidProvider);
-    log('isFormValid: $isFormValid');
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),

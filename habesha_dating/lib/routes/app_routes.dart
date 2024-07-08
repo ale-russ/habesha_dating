@@ -11,48 +11,20 @@ import '/screens/intro_page.dart';
 import '/widgets/logo.dart';
 import "/screens/home/home.dart";
 
-// class AppRoutes {
-//   final router = GoRouter(routes: <RouteBase>[
-//     GoRoute(
-//       path: "/",
-//       builder: (BuildContext context, GoRouterState state) => const Logo(),
-//     ),
-//     GoRoute(
-//       path: "/intro",
-//       builder: (BuildContext context, GoRouterState state) => const IntroPage(),
-//     ),
-//     GoRoute(
-//       path: "/signup",
-//       builder: (BuildContext context, GoRouterState state) {
-//         return SignupPage();
-//       },
-//     ),
-//     GoRoute(
-//       path: "/login",
-//       builder: (BuildContext context, GoRouterState state) {
-//         return LoginPage();
-//       },
-//     ),
-//     GoRoute(
-//       path: "/home",
-//       builder: (BuildContext context, GoRouterState state) => const HomePage(),
-//     )
-//   ]);
-// }
-
 final goRouterProvider = Provider<GoRouter>((ref) {
   final isLoggedIn = ref.watch(userProvider.notifier).isLoggedIn;
 
   log("ISLOGGED IN: $isLoggedIn");
 
   return GoRouter(
-    initialLocation: isLoggedIn ? "/home" : "/intro",
-    /*  redirect: (context, state) {
-      final isLoggingIn = state.subloc == '/intro';
-      if (isLoggingIn == null && !isLoggingIn) return '/intro';
-      if (isLoggingIn != null && isLoggingIn) return '/';
-      return null;
-    }, */
+    initialLocation: isLoggedIn ? "/home" : "/",
+    // redirect: (context, state) {
+    //   final isLoggingIn = state.matchedLocation == '/home';
+    //   log("isLoggingIn variable: $isLoggedIn");
+    //   if (!isLoggingIn) return '/intro';
+    //   if (isLoggingIn) return '/home';
+    //   return null;
+    // },
     routes: <RouteBase>[
       GoRoute(
         path: "/",

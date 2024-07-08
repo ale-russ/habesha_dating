@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
+
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,31 +27,35 @@ class AuthService {
 
         return user;
       } else {
-        throw Exception(datingUserFromJson(response.body));
+        // log("ERror: ${(jsonDecode(response.body)['msg'])}");
+        throw jsonDecode(response.body)['msg'];
       }
     } on Exception catch (_) {
       rethrow;
     }
   }
 
-  Future<DatingUser> register(
-      String email, String password, String userName) async {
-    log("Email: $email, Password: $password, userName: $userName");
+  Future<DatingUser> register(String email, String password, String userName,
+      Uint8List? imageFile) async {
     try {
-      final response = await http.post(
-        Uri.parse(registerRoute),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(
-            {"email": email, "password": password, "userName": userName}),
-      );
-      if (response.statusCode == 200) {
-        return datingUserFromJson(response.body);
+      final req = http.MultipartRequest("POST", Uri.parse(registerRoute));
+      req.fields['email'] = email;
+      req.fields['password'] = password;
+      req.fields['userName'] = userName;
+
+      req.files.add(http.MultipartFile.fromBytes(
+          "profileImage", imageFile as List<int>,
+          filename: "profileImage"));
+
+      final res = await req.send();
+      final response = await res.stream.bytesToString();
+
+      if (res.statusCode == 200) {
+        return datingUserFromJson(response);
       } else {
-        log("Response: ${response.body}");
-        throw Exception(jsonDecode(response.body)['msg']);
+        throw Exception(jsonDecode(response)['msg']);
       }
     } catch (err) {
-      log('Error: $err');
       rethrow;
     }
   }

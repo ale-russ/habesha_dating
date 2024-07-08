@@ -1,9 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final userNameProvider = StateProvider<String>((ref) => '');
 final emailProvider = StateProvider<String>((ref) => '');
 final passwordProvider = StateProvider<String>((ref) => '');
 final confirmPasswordProvider = StateProvider<String>((ref) => '');
+final profileImageProvider = StateProvider<Uint8List?>((ref) => null);
 
 final loginEmailProvider = StateProvider<String>((ref) => '');
 final loginPasswordProvider = StateProvider<String>((ref) => '');
@@ -13,6 +16,7 @@ final isFormValidProvider = Provider<bool>((ref) {
   final email = ref.watch(emailProvider);
   final password = ref.watch(passwordProvider);
   final confirmPassword = ref.watch(confirmPasswordProvider);
+  final profileImage = ref.watch(profileImageProvider);
 
   final isEmailValid =
       RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
@@ -21,6 +25,8 @@ final isFormValidProvider = Provider<bool>((ref) {
       RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$')
           .hasMatch(password);
 
+  final isProfileImageValid = profileImage != null;
+
   return userName.isNotEmpty &&
       email.isNotEmpty &&
       password.isNotEmpty &&
@@ -28,7 +34,8 @@ final isFormValidProvider = Provider<bool>((ref) {
       password == confirmPassword &&
       isEmailValid &&
       isNameValid &&
-      isPasswordValid;
+      isPasswordValid &&
+      isProfileImageValid;
 });
 
 final isLoginFormValidProvider = Provider.autoDispose<bool>((ref) {

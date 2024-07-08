@@ -21,6 +21,19 @@ var UserSchema = new Schema({
     type: String,
     required: true,
   },
+  profileImage: [
+    {
+      required: true,
+      imageName: String,
+      originalName: String,
+      size: Number,
+      type: String,
+      path: String,
+      createdAt: { type: Date, default: Date.now },
+      updatedAt: { type: Date, default: Date.now },
+      uploadedAt: { type: Date, default: Date.now },
+    },
+  ],
 });
 
 UserSchema.methods.comparePassword = function (userPassword) {

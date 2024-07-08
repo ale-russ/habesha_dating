@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import '/models/user_model.dart';
 import '../../services/auth_service.dart';
 
@@ -9,7 +11,7 @@ class AuthRepository {
   }
 
   Future<DatingUser> register(
-      String email, String password, String name) async {
-    return await _authService.register(email, password, name);
+      String email, String password, String name, Uint8List? imageFile) async {
+    return await _authService.register(email, password, name, imageFile);
   }
 }

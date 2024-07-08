@@ -5,6 +5,9 @@ const Joi = require("joi");
 const { ObjectId } = require("mongodb");
 const MongoClient = require("mongodb").MongoClient;
 const dotenv = require("dotenv");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 
 const User = require("../models/user_models");
 const { verifyToken } = require("../middleware/auth");
@@ -20,6 +23,25 @@ const userSchema = Joi.object({
   password: Joi.string().min(6).required(),
   userName: Joi.string().required(),
 });
+
+const uploadDir = "uploads";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      path.parse(file.originalname).name + path.extname(file.originalname)
+    );
+  },
+});
+
+const upload = multer({ storage });
 
 const client = new MongoClient(mongoUrl);
 
@@ -41,7 +63,7 @@ async function fetchUserData(userCollection, id) {
 }
 
 // register route
-router.post("/register", async (req, res) => {
+router.post("/register", upload.single("profileImage"), async (req, res) => {
   const validationResult = userSchema.validate(req.body);
   console.log("email: ", req.body);
 
@@ -51,11 +73,15 @@ router.post("/register", async (req, res) => {
       .status(400)
       .json({ msg: validationResult.error.details[0].message });
 
-  const { email, password } = req.body;
+  const { email, password, userName } = req.body;
 
   // check if fields are not empty
-  if (!email || !password)
+  if (!userName || !email || !password)
     return res.status(400).json({ msg: "Please enter all fields" });
+
+  // check if profile image is provided
+  if (!req.file)
+    return res.status(400).json({ msg: "Profile Image is required" });
 
   // check if email exists
   const emailExists = await checkEmailStatus(userCollection, email);
@@ -66,7 +92,12 @@ router.post("/register", async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   // create a new user object and insert it to the db
-  const newUser = { email, password: hashedPassword };
+  const newUser = {
+    userName,
+    email,
+    password: hashedPassword,
+    profileImage: req.file.path,
+  };
 
   try {
     await userCollection.insertOne(newUser);
@@ -107,11 +138,16 @@ router.post("/login", async (req, res) => {
 
     const userId = user._id;
     const userEmail = user.email;
+    const userProfileImage = user.profileImage;
 
     // send the token in the response
-    return res
-      .status(200)
-      .json({ msg: "User successfully Logged In", token, userId, userEmail });
+    return res.status(200).json({
+      msg: "User successfully Logged In",
+      token,
+      userId,
+      userEmail,
+      userProfileImage,
+    });
   } catch (err) {
     return res
       .status(500)

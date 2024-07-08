@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:habesha_dating/providers/loading_provider.dart';
 
 // import '/models/user_model.dart';
+import '../../widgets/common/loader.dart';
 import '/providers/auth/auth_provider.dart';
 
 import '../../providers/auth/form_validation_provider.dart';
@@ -29,6 +31,7 @@ class LoginPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeProvider);
+    final isLoading = ref.watch(loadingProvider);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -36,58 +39,67 @@ class LoginPage extends ConsumerWidget {
           ? AppColors.darkAddIconBorderColor
           : AppColors.secondaryLight,
       appBar: const CustomAppBar(),
-      body: Form(
-        child: Column(
-          children: [
-            const AuthHeading(
-              label: 'Login To Habesha Dating',
-              isLogin: true,
+      body: isLoading
+          ? const Loader()
+          : Form(
+              child: Column(
+                children: [
+                  const AuthHeading(
+                    label: 'Login To Habesha Dating',
+                    isLogin: true,
+                  ),
+                  const SocialIcons(),
+                  const SizedBox(height: 30),
+                  const OrSpacer(),
+                  const SizedBox(height: 30),
+                  CustomTextForm(
+                    controller: emailController!,
+                    labelText: 'Your Email',
+                    onChanged: (text) =>
+                        ref.read(emailProvider.notifier).state = text,
+                  ),
+                  CustomTextForm(
+                    controller: passwordController!,
+                    labelText: 'Password',
+                    obscureText: true,
+                    onChanged: (text) =>
+                        ref.read(passwordProvider.notifier).state = text,
+                  ),
+                  const SizedBox(height: 30),
+                  LoginButton(
+                    buttonLabel: 'Login',
+                    label: "Forgot password? ",
+                    onButtonTap: () async {
+                      final ctx = ScaffoldMessenger.of(context);
+                      ref.read(loadingProvider.notifier).state = true;
+                      try {
+                        await ref
+                            .read(userProvider.notifier)
+                            .login(
+                              emailController!.text,
+                              passwordController!.text,
+                            )
+                            .then((_) => context.go("/home"));
+                      } catch (err) {
+                        ctx.showSnackBar(SnackBar(
+                          backgroundColor: AppColors.darkErrorColor,
+                          content: Text(
+                            err.toString(),
+                          ),
+                        ));
+                      } finally {
+                        ref.read(loadingProvider.notifier).state = false;
+                      }
+                    },
+                    onTap: () {},
+                    forgetPassword: true,
+                    color: AppColors.primaryLightColor,
+                    validate: true,
+                    isLogin: true,
+                  ),
+                ],
+              ),
             ),
-            const SocialIcons(),
-            const SizedBox(height: 30),
-            const OrSpacer(),
-            const SizedBox(height: 30),
-            CustomTextForm(
-              controller: emailController!,
-              labelText: 'Your Email',
-              onChanged: (text) =>
-                  ref.read(emailProvider.notifier).state = text,
-            ),
-            CustomTextForm(
-              controller: passwordController!,
-              labelText: 'Password',
-              obscureText: true,
-              onChanged: (text) =>
-                  ref.read(passwordProvider.notifier).state = text,
-            ),
-            const SizedBox(height: 30),
-            LoginButton(
-              buttonLabel: 'Login',
-              label: "Forgot password? ",
-              onButtonTap: () async {
-                /*  DatingUser? user; */
-                try {
-                  await ref
-                      .read(userProvider.notifier)
-                      .login(
-                        emailController!.text,
-                        passwordController!.text,
-                      )
-                      .then((_) => context.go("/home"));
-                } catch (err) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(err.toString())));
-                }
-              },
-              onTap: () {},
-              forgetPassword: true,
-              color: AppColors.primaryLightColor,
-              validate: true,
-              isLogin: true,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

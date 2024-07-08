@@ -1,4 +1,6 @@
-import 'dart:developer';
+// import 'dart:developer';
+
+import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,11 +14,19 @@ final userProvider = StateNotifierProvider<UserNotifier, DatingUser?>(
     (ref) => UserNotifier(ref));
 
 class UserNotifier extends StateNotifier<DatingUser?> {
-  UserNotifier(this._ref) : super(null);
+  UserNotifier(this._ref) : super(null) {
+    loginStatus();
+  }
 
   final Ref _ref;
 
   bool isLoggedIn = false;
+
+  void loginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    isLoggedIn = (prefs.getBool("isLoggedIn")) ?? false;
+    // log('isLoggedIN in provider: $isLoggedIn');
+  }
 
   Future<void> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
@@ -32,24 +42,23 @@ class UserNotifier extends StateNotifier<DatingUser?> {
   }
 
   Future<void> login(String email, String password) async {
+    final user = await _ref.read(authRepositoryProvider).login(email, password);
     try {
-      final user =
-          await _ref.read(authRepositoryProvider).login(email, password);
       state = user;
       _loadUser();
-      log('User: ${user.msg}');
+      // log('User: ${user.msg}');
     } catch (err) {
-      log('AUTH ERROR: $err');
       state = null;
       rethrow;
     }
   }
 
-  Future<void> register(String email, String password, String username) async {
+  Future<void> register(
+      String email, String password, String username, Uint8List? file) async {
     try {
       final user = await _ref
           .read(authRepositoryProvider)
-          .register(email, password, username);
+          .register(email, password, username, file);
       state = user;
     } catch (err) {
       state = null;

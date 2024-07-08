@@ -1,9 +1,12 @@
-import 'dart:developer';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habesha_dating/providers/auth/auth_provider.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../providers/loading_provider.dart';
+import '../../widgets/common/loader.dart';
+import '/utils/image_picker.dart';
+import '/providers/auth/auth_provider.dart';
 import '../../providers/auth/form_validation_provider.dart';
 import '/widgets/auth_widgets/auth_heading.dart';
 import '../../providers/theme/theme_provider.dart';
@@ -14,22 +17,52 @@ import '../../themes/app_colors.dart';
 import '/widgets/or_spacer.dart';
 import '/widgets/auth_widgets/social_icons.dart';
 
-// ignore: must_be_immutable
-class SignupPage extends ConsumerWidget {
-  SignupPage({
+class SignupPage extends ConsumerStatefulWidget {
+  const SignupPage({
     super.key,
   });
+  @override
+  SignupPageState createState() => SignupPageState();
+}
 
+// ignore: must_be_immutable
+class SignupPageState extends ConsumerState<SignupPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final _formKey = GlobalKey<FormState>();
+
+  Uint8List? _imageBytes;
+  // bool isLoading = false;
 
   TextEditingController? emailController = TextEditingController();
   TextEditingController? passwordController = TextEditingController();
   TextEditingController? confirmPasswordController = TextEditingController();
   TextEditingController? nameController = TextEditingController();
 
+  void _pickImage(WidgetRef ref) async {
+    if (kIsWeb) {
+      final pickedImage = await pickedImageWeb();
+      if (pickedImage != null) {
+        setState(() {
+          _imageBytes = pickedImage;
+        });
+      }
+    } else {
+      final pickedImageGallery = await pickImage();
+      if (pickedImageGallery != null) {
+        final bytes = await pickedImageGallery.readAsBytes();
+        setState(() {
+          _imageBytes = bytes;
+        });
+      }
+    }
+    ref.read(profileImageProvider.notifier).state = _imageBytes;
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final themeMode = ref.watch(themeProvider);
+    final isLoading = ref.watch(loadingProvider);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -37,70 +70,124 @@ class SignupPage extends ConsumerWidget {
           ? AppColors.darkAddIconBorderColor
           : AppColors.secondaryLight,
       appBar: const CustomAppBar(),
-      body: Form(
-        child: Column(
-          children: [
-            const AuthHeading(
-              label: 'Sign up with Email',
-              isLogin: false,
+      body: isLoading
+          ? const Loader()
+          : Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  const AuthHeading(
+                    label: 'Sign up with Email',
+                    isLogin: false,
+                  ),
+                  const SocialIcons(),
+                  const SizedBox(height: 30),
+                  const OrSpacer(),
+                  const SizedBox(height: 30),
+                  CustomTextForm(
+                    controller: nameController!,
+                    labelText: 'Your Name',
+                    onChanged: (text) =>
+                        ref.read(userNameProvider.notifier).state = text,
+                  ),
+                  CustomTextForm(
+                    controller: emailController!,
+                    labelText: 'Your Email',
+                    onChanged: (text) =>
+                        ref.read(emailProvider.notifier).state = text,
+                  ),
+                  CustomTextForm(
+                    controller: passwordController!,
+                    labelText: 'Password',
+                    obscureText: true,
+                    onChanged: (text) =>
+                        ref.read(passwordProvider.notifier).state = text,
+                  ),
+                  CustomTextForm(
+                    controller: confirmPasswordController!,
+                    labelText: 'Confirm Password',
+                    obscureText: true,
+                    onChanged: (text) =>
+                        ref.read(confirmPasswordProvider.notifier).state = text,
+                  ),
+                  const SizedBox(height: 30),
+                  InkWell(
+                    onTap: () => _pickImage(ref),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 24),
+                      height: 80,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                            color: themeMode == ThemeMode.dark
+                                ? AppColors.passwordBorderDarkColor
+                                : AppColors.passwordBorderLightColor),
+                      ),
+                      child: Center(
+                        child: _imageBytes != null
+                            ? ClipOval(
+                                child: Image.memory(_imageBytes!,
+                                    height: 60, width: 60),
+                              )
+                            : Text(
+                                "Upload Profile Pic",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displayMedium!
+                                    .copyWith(
+                                        fontSize: 14,
+                                        color: themeMode == ThemeMode.light
+                                            ? AppColors.secondaryDark
+                                            : AppColors.secondaryLight),
+                              ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  LoginButton(
+                    buttonLabel: 'Create an account',
+                    label: "Already have an account? Login ",
+                    onButtonTap: () async {
+                      final ctx = ScaffoldMessenger.of(context);
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                      }
+
+                      ref.read(loadingProvider.notifier).state = true;
+                      try {
+                        await ref
+                            .read(userProvider.notifier)
+                            .register(
+                                emailController!.text,
+                                passwordController!.text,
+                                nameController!.text,
+                                _imageBytes)
+                            .then((_) => context.go("/login"));
+                        ctx.showSnackBar(const SnackBar(
+                          backgroundColor: AppColors.primaryDarkColor,
+                          content: Text("User Successfully Registered"),
+                        ));
+                      } catch (err) {
+                        ctx.showSnackBar(SnackBar(
+                          backgroundColor: AppColors.darkErrorColor,
+                          content: Text(err.toString()),
+                        ));
+                      } finally {
+                        ref.read(loadingProvider.notifier).state = false;
+                      }
+                    },
+                    onTap: () {
+                      context.go("/login");
+                    },
+                    forgetPassword: true,
+                    color: AppColors.primaryLightColor,
+                    validate: true,
+                    isLogin: false,
+                  ),
+                ],
+              ),
             ),
-            const SocialIcons(),
-            const SizedBox(height: 30),
-            const OrSpacer(),
-            const SizedBox(height: 30),
-            CustomTextForm(
-              controller: nameController!,
-              labelText: 'Your Name',
-              onChanged: (text) =>
-                  ref.read(userNameProvider.notifier).state = text,
-            ),
-            CustomTextForm(
-              controller: emailController!,
-              labelText: 'Your Email',
-              onChanged: (text) =>
-                  ref.read(emailProvider.notifier).state = text,
-            ),
-            CustomTextForm(
-              controller: passwordController!,
-              labelText: 'Password',
-              obscureText: true,
-              onChanged: (text) =>
-                  ref.read(passwordProvider.notifier).state = text,
-            ),
-            CustomTextForm(
-              controller: confirmPasswordController!,
-              labelText: 'Confirm Password',
-              obscureText: true,
-              onChanged: (text) =>
-                  ref.read(confirmPasswordProvider.notifier).state = text,
-            ),
-            const SizedBox(height: 30),
-            LoginButton(
-              buttonLabel: 'Create an account',
-              label: "",
-              onButtonTap: () async {
-                try {
-                  await ref.read(userProvider.notifier).register(
-                      emailController!.text,
-                      passwordController!.text,
-                      nameController!.text);
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("User Successfully Registered")));
-                } catch (err) {
-                  log('Error: $err');
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(err.toString())));
-                }
-              },
-              onTap: () {},
-              forgetPassword: true,
-              color: AppColors.primaryLightColor,
-              validate: true,
-              isLogin: false,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
