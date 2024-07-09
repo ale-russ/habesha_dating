@@ -51,6 +51,7 @@ dependencies:
   mime_type: ^1.0.0
   path: ^1.9.0
   file_picker: ^8.0.6
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +84,10 @@ flutter:
     - assets/images/logo.jpg
     - assets/images/logo.png
     - assets/images/google.png
+    - assets/images/Call.svg
+    - assets/images/message.svg
+    - assets/images/settings.svg
+    - assets/images/user.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

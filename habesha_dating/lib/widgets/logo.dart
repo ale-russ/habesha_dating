@@ -7,23 +7,28 @@ class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: InkWell(
-        onTap: () => context.go("/intro"),
-        child: Center(
+      body: Center(
+        child: SizedBox(
+          height: 250,
+          width: 250,
+          child: InkWell(
+            onTap: () => context.go("/intro"),
             child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/logo.png",
-              height: 180,
-              width: 180,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/logo.png",
+                  height: 180,
+                  width: 180,
+                ),
+                const Text(
+                  'Habesha Dating',
+                  style: TextStyle(fontSize: 28),
+                )
+              ],
             ),
-            const Text(
-              'Habesha Dating',
-              style: TextStyle(fontSize: 28),
-            )
-          ],
-        )),
+          ),
+        ),
       ),
     );
   }
