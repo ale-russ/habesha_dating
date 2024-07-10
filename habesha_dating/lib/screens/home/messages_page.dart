@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '/widgets/common/custom_dismissible.dart';
 import '/images.dart';
 import '../../themes/app_colors.dart';
 import '/providers/theme/theme_provider.dart';
@@ -16,16 +17,16 @@ class MessagesPage extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // OnlineContacts(),
+          OnlineContacts(),
           Container(
             width: size.width,
-            // height: size.height * 0.76,
-            height: size.height,
-            padding: const EdgeInsets.only(top: 8),
+            // height: size.height,
+            height: size.height * 0.76,
+            padding: const EdgeInsets.only(top: 16),
             decoration: BoxDecoration(
               color: theme == ThemeMode.light
                   ? AppColors.secondaryLight
-                  : AppColors.secondaryDark,
+                  : AppColors.darkAddIconBorderColor,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(26),
                 topRight: Radius.circular(26),
@@ -35,32 +36,18 @@ class MessagesPage extends ConsumerWidget {
               physics: const BouncingScrollPhysics(),
               itemCount: images.length,
               itemBuilder: (context, index) {
-                return Dismissible(
-                  behavior: HitTestBehavior.translucent,
-                  secondaryBackground: Container(
-                    color: Colors.red,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    alignment: Alignment.centerRight,
-                    child: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                  ),
-                  background: Container(
-                    color: Colors.green,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    alignment: Alignment.centerLeft,
-                    child: const Icon(
-                      Icons.archive,
-                      color: Colors.white,
-                    ),
-                  ),
-                  key: Key(index.toString()),
+                return CustomDismissibleCard(
+                  onDelete: () {},
+                  onNotification: () {},
                   child: Stack(
                     children: [
                       Container(
+                        color: theme == ThemeMode.light
+                            ? AppColors.secondaryLight
+                            : AppColors.darkAddIconBorderColor,
                         margin: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
+                            vertical: 8, horizontal: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         height: 80,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,7 +77,11 @@ class MessagesPage extends ConsumerWidget {
                                       style: Theme.of(context)
                                           .textTheme
                                           .displayMedium!
-                                          .copyWith(fontSize: 16),
+                                          .copyWith(
+                                              fontSize: 16,
+                                              color: theme == ThemeMode.dark
+                                                  ? AppColors.secondaryLight
+                                                  : AppColors.secondaryDark),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
@@ -117,7 +108,9 @@ class MessagesPage extends ConsumerWidget {
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelSmall!
-                                      .copyWith(),
+                                      .copyWith(
+                                        color: AppColors.darkGreyDarkColor,
+                                      ),
                                 ),
                                 const SizedBox(height: 4),
                                 Container(
@@ -147,7 +140,7 @@ class MessagesPage extends ConsumerWidget {
                       ),
                       Positioned(
                         top: 58,
-                        left: 55,
+                        left: 63,
                         child: Container(
                           width: 10,
                           height: 10,

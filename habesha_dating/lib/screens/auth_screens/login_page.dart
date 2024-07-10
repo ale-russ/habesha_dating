@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -49,9 +50,9 @@ class LoginPage extends ConsumerWidget {
                     isLogin: true,
                   ),
                   const SocialIcons(),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: kIsWeb ? 30 : 16),
                   const OrSpacer(),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: kIsWeb ? 30 : 16),
                   CustomTextForm(
                     controller: emailController!,
                     labelText: 'Your Email',
@@ -65,7 +66,7 @@ class LoginPage extends ConsumerWidget {
                     onChanged: (text) =>
                         ref.read(passwordProvider.notifier).state = text,
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: kIsWeb ? 30 : 16),
                   LoginButton(
                     buttonLabel: 'Login',
                     label: "Forgot password? ",

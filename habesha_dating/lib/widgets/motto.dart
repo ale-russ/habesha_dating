@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Motto extends StatelessWidget {
@@ -13,25 +14,33 @@ class Motto extends StatelessWidget {
           Text(
             'Connect ',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.white, fontSize: 52, fontWeight: FontWeight.w300),
+                color: Colors.white,
+                fontSize: kIsWeb ? 52 : 36,
+                fontWeight: FontWeight.w300),
             textAlign: TextAlign.center,
           ),
           Text(
             'friends',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.white, fontSize: 52, fontWeight: FontWeight.w300),
+                color: Colors.white,
+                fontSize: kIsWeb ? 52 : 36,
+                fontWeight: FontWeight.w300),
             textAlign: TextAlign.center,
           ),
           Text(
             'easily &',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.white, fontSize: 52, fontWeight: FontWeight.w600),
+                color: Colors.white,
+                fontSize: kIsWeb ? 52 : 36,
+                fontWeight: FontWeight.w600),
             textAlign: TextAlign.center,
           ),
           Text(
             'quickly',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.white, fontSize: 52, fontWeight: FontWeight.w600),
+                color: Colors.white,
+                fontSize: kIsWeb ? 52 : 36,
+                fontWeight: FontWeight.w600),
             textAlign: TextAlign.center,
           ),
           Column(

@@ -17,7 +17,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   log("ISLOGGED IN: $isLoggedIn");
 
   return GoRouter(
-    initialLocation: isLoggedIn ? "/home" : "/",
+    // initialLocation: isLoggedIn ? "/home" : "/",
+    initialLocation: "/home",
     // redirect: (context, state) {
     //   final isLoggingIn = state.matchedLocation == '/home';
     //   log("isLoggingIn variable: $isLoggedIn");

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,7 +29,7 @@ class AuthHeading extends ConsumerWidget {
                   : AppColors.headingLightColor,
               fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: kIsWeb ? 16 : 8),
         Text(
           isLogin
               ? 'Welcome back! Sign in using your social '

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 // import 'dart:developer';
 
 import 'dart:typed_data';
@@ -30,7 +31,8 @@ class AuthService {
         // log("ERror: ${(jsonDecode(response.body)['msg'])}");
         throw jsonDecode(response.body)['msg'];
       }
-    } on Exception catch (_) {
+    } on Exception catch (err) {
+      log("Error: $err");
       rethrow;
     }
   }

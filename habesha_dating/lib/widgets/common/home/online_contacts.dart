@@ -16,7 +16,7 @@ class OnlineContacts extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
     return Container(
-        height: 100,
+        height: 80,
         width: size.width,
         color: Colors.transparent,
         child: SingleChildScrollView(
@@ -78,7 +78,7 @@ class _CustomProfileImageState extends ConsumerState<CustomProfileImage> {
             Color borderColor = snapshot.data ?? Colors.transparent;
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 8.0),
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(1),
               decoration: BoxDecoration(
                 border: Border.all(
                   color: borderColor,
