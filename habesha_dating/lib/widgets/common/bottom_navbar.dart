@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '/providers/bottom_nav_provider.dart';
-import '/providers/theme/theme_provider.dart';
+// import '/providers/theme/theme_provider.dart';
 
 import '../../themes/app_colors.dart';
 
@@ -13,9 +13,10 @@ class BottomNavBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(bottomNavBarIndexProvider);
-    final theme = ref.watch(themeProvider);
+    // final theme = ref.watch(themeProvider);
 
     return BottomNavigationBar(
+      // type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
       onTap: (index) {
         ref.read(bottomNavBarIndexProvider.notifier).state = index;

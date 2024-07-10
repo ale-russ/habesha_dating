@@ -4,48 +4,53 @@ import 'app_colors.dart';
 
 class AppThemes {
   static final lightTheme = ThemeData(
-      useMaterial3: true,
-      primaryColor: AppColors.primaryLightColor,
-      colorScheme: const ColorScheme.light(
-        brightness: Brightness.dark,
-        primary: AppColors.primaryLightColor,
-        secondary: AppColors.secondaryLight,
-        error: AppColors.lightErrorColor,
+    useMaterial3: true,
+    primaryColor: AppColors.primaryLightColor,
+    colorScheme: const ColorScheme.light(
+      brightness: Brightness.dark,
+      primary: AppColors.primaryLightColor,
+      secondary: AppColors.secondaryLight,
+      error: AppColors.lightErrorColor,
+    ),
+    textTheme: const TextTheme(
+      bodyLarge:
+          TextStyle(color: AppColors.darkGreyLightColor, fontFamily: 'Caros'),
+    ),
+    buttonTheme: const ButtonThemeData(
+      buttonColor: AppColors.primaryLightColor,
+      textTheme: ButtonTextTheme.primary,
+      disabledColor: AppColors.disabledLightColor,
+    ),
+    inputDecorationTheme: const InputDecorationTheme(
+      labelStyle: TextStyle(color: AppColors.primaryDarkColor, fontSize: 12),
+      floatingLabelStyle:
+          TextStyle(color: AppColors.primaryLightColor, fontSize: 12),
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      errorStyle: TextStyle(
+          color: AppColors.lightErrorColor,
+          fontSize: 12,
+          fontWeight: FontWeight.w200),
+      errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.lightErrorColor)),
+      border: UnderlineInputBorder(
+        borderSide:
+            BorderSide(color: AppColors.passwordBorderLightColor, width: 0),
       ),
-      textTheme: const TextTheme(
-        bodyLarge:
-            TextStyle(color: AppColors.darkGreyLightColor, fontFamily: 'Caros'),
+      focusedBorder: UnderlineInputBorder(
+        borderSide:
+            BorderSide(color: AppColors.passwordBorderLightColor, width: 0),
       ),
-      buttonTheme: const ButtonThemeData(
-        buttonColor: AppColors.primaryLightColor,
-        textTheme: ButtonTextTheme.primary,
-        disabledColor: AppColors.disabledLightColor,
+      enabledBorder: UnderlineInputBorder(
+        borderSide:
+            BorderSide(color: AppColors.passwordBorderLightColor, width: 0),
       ),
-      inputDecorationTheme: const InputDecorationTheme(
-        labelStyle: TextStyle(color: AppColors.primaryDarkColor, fontSize: 12),
-        floatingLabelStyle:
-            TextStyle(color: AppColors.primaryLightColor, fontSize: 12),
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        errorStyle: TextStyle(
-            color: AppColors.lightErrorColor,
-            fontSize: 12,
-            fontWeight: FontWeight.w200),
-        errorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: AppColors.lightErrorColor)),
-        border: UnderlineInputBorder(
-          borderSide:
-              BorderSide(color: AppColors.passwordBorderLightColor, width: 0),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide:
-              BorderSide(color: AppColors.passwordBorderLightColor, width: 0),
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide:
-              BorderSide(color: AppColors.passwordBorderLightColor, width: 0),
-        ),
-      ),
-      fontFamily: 'Caros');
+    ),
+    fontFamily: 'Caros',
+
+    /* splashColor: Colors.transparent,
+    highlightColor: Colors.transparent,
+    splashFactory: NoSplash.splashFactory, */
+  );
 
   static final darkTheme = ThemeData(
       useMaterial3: true,

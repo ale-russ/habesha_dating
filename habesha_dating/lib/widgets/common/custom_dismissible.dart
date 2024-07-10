@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '/providers/theme/theme_provider.dart';
 import '../../themes/app_colors.dart';
 
 class CustomDismissibleCard extends ConsumerStatefulWidget {
@@ -79,6 +80,7 @@ class _CustomDismissibleCardState extends ConsumerState<CustomDismissibleCard>
 
   @override
   Widget build(BuildContext context) {
+    final theme = ref.watch(themeProvider);
     return GestureDetector(
       onHorizontalDragUpdate: _handleDragUpdate,
       onHorizontalDragEnd: _handleDragEnd,
@@ -98,12 +100,16 @@ class _CustomDismissibleCardState extends ConsumerState<CustomDismissibleCard>
                   icon: Container(
                     height: 40,
                     width: 40,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.darkErrorColor),
-                    child: const Icon(
+                        color: theme == ThemeMode.dark
+                            ? AppColors.secondaryLight
+                            : AppColors.secondaryDark),
+                    child: Icon(
                       CupertinoIcons.bell,
-                      color: Colors.white,
+                      color: theme == ThemeMode.dark
+                          ? AppColors.secondaryDark
+                          : AppColors.secondaryLight,
                     ),
                   ),
                   onPressed: widget.onNotification,
