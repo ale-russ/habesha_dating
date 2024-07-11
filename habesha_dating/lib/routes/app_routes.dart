@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:habesha_dating/widgets/common/loader.dart';
 
 import '../providers/auth/auth_provider.dart';
 import '/screens/auth_screens/login_page.dart';
@@ -12,20 +13,25 @@ import '/widgets/logo.dart';
 import "/screens/home/home.dart";
 
 final goRouterProvider = Provider<GoRouter>((ref) {
-  final isLoggedIn = ref.watch(userProvider.notifier).isLoggedIn;
+  final userState = ref.watch(userProvider);
 
-  log("ISLOGGED IN: $isLoggedIn");
+  // log("userState IN: ${userState.value == null}");
 
   return GoRouter(
-    // initialLocation: isLoggedIn ? "/home" : "/",
-    initialLocation: "/home",
-    // redirect: (context, state) {
-    //   final isLoggingIn = state.matchedLocation == '/home';
-    //   log("isLoggingIn variable: $isLoggedIn");
-    //   if (!isLoggingIn) return '/intro';
-    //   if (isLoggingIn) return '/home';
-    //   return null;
-    // },
+    initialLocation: userState.value != null ? "/home" : "/intro",
+    redirect: (context, state) {
+      final isLoggingIn = state.matchedLocation == "/home";
+
+      // Redirect based on the user state
+      return userState.when(
+          data: (user) {
+            if (user == null && isLoggingIn) return "/intro";
+            if (user != null && !isLoggingIn) return "/home";
+            return null;
+          },
+          error: (_, stacktrace) => null,
+          loading: () => null);
+    },
     routes: <RouteBase>[
       GoRoute(
         path: "/",

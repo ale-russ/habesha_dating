@@ -53,7 +53,7 @@ class HomePage extends ConsumerWidget {
             ),
             onPressed: () {
               ref.read(userProvider.notifier).logout();
-              context.go("/login");
+              context.pushReplacement("/intro");
             },
           ),
         ),

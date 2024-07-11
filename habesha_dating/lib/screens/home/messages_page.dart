@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../providers/loading_provider.dart';
 import '../../widgets/custom_container.dart';
 import '/widgets/common/custom_dismissible.dart';
 import '/images.dart';
@@ -14,12 +15,13 @@ class MessagesPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
+    final isLoading = ref.watch(loadingProvider);
 
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
       child: Column(
         children: [
-          OnlineContacts(),
+          // OnlineContacts(),
           CustomContainer(
             child: LayoutBuilder(
               builder: (context, constraints) {

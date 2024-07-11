@@ -2,12 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:habesha_dating/providers/loading_provider.dart';
 
-// import '/models/user_model.dart';
+import '/providers/loading_provider.dart';
 import '../../widgets/common/loader.dart';
 import '/providers/auth/auth_provider.dart';
-
 import '../../providers/auth/form_validation_provider.dart';
 import '/widgets/auth_widgets/auth_heading.dart';
 import '../../providers/theme/theme_provider.dart';
@@ -18,31 +16,33 @@ import '../../themes/app_colors.dart';
 import '/widgets/or_spacer.dart';
 import '/widgets/auth_widgets/social_icons.dart';
 
-// ignore: must_be_immutable
-class LoginPage extends ConsumerWidget {
-  LoginPage({
-    super.key,
-  });
+class LoginPage extends ConsumerStatefulWidget {
+  const LoginPage({super.key});
 
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends ConsumerState<LoginPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController? emailController = TextEditingController();
   TextEditingController? passwordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final themeMode = ref.watch(themeProvider);
     final isLoading = ref.watch(loadingProvider);
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: themeMode == ThemeMode.dark
-          ? AppColors.darkAddIconBorderColor
-          : AppColors.secondaryLight,
-      appBar: const CustomAppBar(),
-      body: isLoading
-          ? const Loader()
-          : Form(
+    return isLoading
+        ? const Loader()
+        : Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: themeMode == ThemeMode.dark
+                ? AppColors.darkAddIconBorderColor
+                : AppColors.secondaryLight,
+            appBar: const CustomAppBar(),
+            body: Form(
               child: Column(
                 children: [
                   const AuthHeading(
@@ -72,15 +72,15 @@ class LoginPage extends ConsumerWidget {
                     label: "Forgot password? ",
                     onButtonTap: () async {
                       final ctx = ScaffoldMessenger.of(context);
-                      ref.read(loadingProvider.notifier).state = true;
+                      ref.watch(loadingProvider.notifier).state = true;
                       try {
-                        await ref
-                            .read(userProvider.notifier)
-                            .login(
+                        await ref.read(userProvider.notifier).login(
                               emailController!.text,
                               passwordController!.text,
-                            )
-                            .then((_) => context.go("/home"));
+                            );
+                        if (mounted) {
+                          context.pushReplacement("/home");
+                        }
                       } catch (err) {
                         ctx.showSnackBar(SnackBar(
                           backgroundColor: AppColors.darkErrorColor,
@@ -89,7 +89,7 @@ class LoginPage extends ConsumerWidget {
                           ),
                         ));
                       } finally {
-                        ref.read(loadingProvider.notifier).state = false;
+                        ref.watch(loadingProvider.notifier).state = false;
                       }
                     },
                     onTap: () {},
@@ -101,6 +101,6 @@ class LoginPage extends ConsumerWidget {
                 ],
               ),
             ),
-    );
+          );
   }
 }
