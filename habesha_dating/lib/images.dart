@@ -249,3 +249,54 @@ List<Map<String, dynamic>> messages = [
     "unread": "4"
   },
 ];
+
+final chat = {
+  "users": {
+    "Alice": {"isOnline": true},
+    "Bob": {"isOnline": false}
+  },
+  "chats": [
+    {
+      "sender": "Alice",
+      "timestamp": "2024-07-01T10:00:00Z",
+      "message": "Hi Bob, how are you doing today?"
+    },
+    {
+      "sender": "Bob",
+      "timestamp": "2024-07-01T10:01:00Z",
+      "message": "Hey Alice! I'm good, thanks. How about you?"
+    },
+    {
+      "sender": "Alice",
+      "timestamp": "2024-07-01T10:02:00Z",
+      "message":
+          "I'm doing well, thank you. Did you finish the report for the project?"
+    },
+    {
+      "sender": "Bob",
+      "timestamp": "2024-07-01T10:03:00Z",
+      "message": "Yes, I did. I sent it to your email just now."
+    },
+    {
+      "sender": "Alice",
+      "timestamp": "2024-07-01T10:04:00Z",
+      "message":
+          "Great! I'll review it and get back to you if I have any questions."
+    },
+    {
+      "sender": "Bob",
+      "timestamp": "2024-07-01T10:05:00Z",
+      "message": "Sounds good. Let me know if you need any help with it."
+    },
+    {
+      "sender": "Alice",
+      "timestamp": "2024-07-01T10:06:00Z",
+      "message": "Will do. Thanks, Bob!"
+    },
+    {
+      "sender": "Bob",
+      "timestamp": "2024-07-01T10:07:00Z",
+      "message": "You're welcome, Alice!"
+    }
+  ]
+};

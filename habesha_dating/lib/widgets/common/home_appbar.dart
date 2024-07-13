@@ -33,7 +33,7 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
             ),
             onPressed: () {},
           ),
-      title: title!,
+      title: title ?? const SizedBox.shrink(),
       actions: [actions ?? const SizedBox.shrink()],
     );
   }
