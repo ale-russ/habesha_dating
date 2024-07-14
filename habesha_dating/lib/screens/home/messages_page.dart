@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:habesha_dating/screens/home/chat_details.dart';
 
 import '../../providers/loading_provider.dart';
@@ -24,7 +25,7 @@ class MessagesPage extends ConsumerWidget {
       physics: const NeverScrollableScrollPhysics(),
       child: Column(
         children: [
-          // OnlineContacts(),
+          OnlineContacts(),
           CustomContainer(
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -34,12 +35,13 @@ class MessagesPage extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
+                        /*  Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (BuildContext context) =>
                                 const ChatDetailsPage(),
                           ),
-                        );
+                        ); */
+                        context.pushNamed("/chat");
                       },
                       child: CustomDismissibleCard(
                         onDelete: () {},

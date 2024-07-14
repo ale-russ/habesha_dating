@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -5,13 +6,23 @@ import '../../providers/theme/theme_provider.dart';
 import '../../themes/app_colors.dart';
 
 class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  const HomeAppBar(
-      {super.key, this.leading, this.actions, this.title, this.color});
+  const HomeAppBar({
+    super.key,
+    this.leading,
+    this.actions,
+    this.title,
+    this.color,
+    this.hasLeading = false,
+    this.centerTitle = true,
+  });
 
   final Widget? leading;
   final Widget? title;
-  final Widget? actions;
+  final List<Widget>? actions;
   final Color? color;
+  final bool hasLeading;
+  final bool centerTitle;
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
@@ -20,21 +31,27 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
     final theme = ref.watch(themeProvider);
 
     return AppBar(
+      titleSpacing: 0,
       backgroundColor: color ??
           (theme == ThemeMode.light
               ? AppColors.headingLightColor
               : AppColors.primaryDarkColor),
-      centerTitle: true,
-      leading: leading ??
-          IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: AppColors.secondaryLight,
-            ),
+      centerTitle: centerTitle,
+      leading: Builder(
+        builder: (context) {
+          if (!hasLeading || kIsWeb) return const SizedBox.shrink();
+          return IconButton(
+            icon: leading ??
+                const Icon(
+                  Icons.arrow_back,
+                  color: AppColors.secondaryLight,
+                ),
             onPressed: () {},
-          ),
+          );
+        },
+      ),
       title: title ?? const SizedBox.shrink(),
-      actions: [actions ?? const SizedBox.shrink()],
+      actions: [...?actions],
     );
   }
 }

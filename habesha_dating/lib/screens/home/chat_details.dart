@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:habesha_dating/images.dart';
 
 import '/providers/theme/theme_provider.dart';
@@ -11,7 +13,15 @@ import '/widgets/common/home_appbar.dart';
 import '../../themes/app_colors.dart';
 
 class ChatDetailsPage extends ConsumerWidget {
-  const ChatDetailsPage({super.key});
+  const ChatDetailsPage(
+      {super.key,
+      required this.isOnline,
+      required this.name,
+      required this.avatar});
+
+  final bool isOnline;
+  final String name;
+  final String avatar;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,46 +33,111 @@ class ChatDetailsPage extends ConsumerWidget {
 
     return Scaffold(
         appBar: HomeAppBar(
-          color: theme == ThemeMode.dark
-              ? AppColors.secondaryDark
-              : AppColors.secondaryLight,
-          leading: Stack(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(shape: BoxShape.circle),
-                child: ClipOval(
-                  child: Image.network(
-                      width: 40,
-                      height: 40,
-                      "https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"),
-                ),
+            centerTitle: false,
+            hasLeading: true,
+            color: theme == ThemeMode.dark
+                ? AppColors.secondaryDark
+                : AppColors.secondaryLight,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: AppColors.secondaryDark,
               ),
-              Positioned(
-                top: 58,
-                left: 63,
-                child: Container(
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    // color: isOnline == "true"
-                    //     ? AppColors.offlineColor
-                    //     : AppColors.primaryLightColor,
+              onPressed: () {
+                context.pop();
+              },
+            ),
+            title: Stack(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(shape: BoxShape.circle),
+                  width: 200,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        child: ClipOval(
+                          child: Image.network(width: 40, height: 40, avatar),
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'John Abraham',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                      color: theme != ThemeMode.dark
+                                          ? AppColors.secondaryDark
+                                          : AppColors.secondaryLight),
+                            ),
+                            Text(
+                              'Online',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w300,
+                                      color: theme != ThemeMode.dark
+                                          ? AppColors.darkGreyDarkColor
+                                          : AppColors.darkGreyLightColor),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
+                Positioned(
+                  top: 30,
+                  left: 40,
+                  child: Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isOnline
+                          ? AppColors.offlineColor
+                          : AppColors.primaryLightColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      CupertinoIcons.phone,
+                      size: 30,
+                      color: AppColors.darkGreyDarkColor,
+                    ),
+                    onPressed: () {},
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      CupertinoIcons.video_camera,
+                      size: 35,
+                      color: AppColors.darkGreyDarkColor,
+                    ),
+                    onPressed: () {},
+                  )
+                ],
               )
-            ],
-          ),
-
-          // title: Text(
-          //   "Home",
-          //   style: Theme.of(context)
-          //       .textTheme
-          //       .bodyLarge!
-          //       .copyWith(color: AppColors.secondaryLight),
-          // ),
-        ),
+            ]),
         body: Container(child: Center(child: Text("hello there"))));
   }
 }

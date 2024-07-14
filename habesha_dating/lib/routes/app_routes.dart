@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:habesha_dating/screens/home/chat_details.dart';
 
 import '/widgets/common/loader.dart';
 import '/screens/home/call_page.dart';
@@ -91,6 +92,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 path: "settings",
                 builder: (BuildContext context, GoRouterState state) =>
                     const SettingsPage()),
+            GoRoute(
+                path: "chat",
+                name: "/chat",
+                builder: (BuildContext context, GoRouterState state) =>
+                    const ChatDetailsPage())
           ])
     ],
   );

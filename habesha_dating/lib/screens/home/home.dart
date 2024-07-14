@@ -36,8 +36,9 @@ class HomePage extends ConsumerWidget {
           ? AppColors.headingLightColor
           : AppColors.primaryDarkColor,
       appBar: HomeAppBar(
+        hasLeading: true,
         leading: Container(
-          margin: const EdgeInsets.all(6),
+          // margin: const EdgeInsets.all(6),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
               // shape: BoxShape.circle,
@@ -64,15 +65,17 @@ class HomePage extends ConsumerWidget {
               .bodyLarge!
               .copyWith(color: AppColors.secondaryLight),
         ),
-        actions: IconButton(
-          onPressed: () {},
-          icon: ClipOval(
-            child: Image.network(
-                width: 40,
-                height: 40,
-                "https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: ClipOval(
+              child: Image.network(
+                  width: 40,
+                  height: 40,
+                  "https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"),
+            ),
           ),
-        ),
+        ],
       ),
       body: pages[currentIndex],
       bottomNavigationBar: Container(
