@@ -41,7 +41,7 @@ class MessagesPage extends ConsumerWidget {
                                 const ChatDetailsPage(),
                           ),
                         ); */
-                        context.pushNamed("/chat");
+                        /*  context.pushNamed("/chat", pathParameters: {name:messages[index]["name"],avatar:images[index], isOline:messages[index]["isOnline"]}); */
                       },
                       child: CustomDismissibleCard(
                         onDelete: () {},
