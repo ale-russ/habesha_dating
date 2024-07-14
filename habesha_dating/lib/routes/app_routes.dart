@@ -92,11 +92,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 path: "settings",
                 builder: (BuildContext context, GoRouterState state) =>
                     const SettingsPage()),
-            GoRoute(
+            /*  GoRoute(
                 path: "chat",
                 name: "/chat",
                 builder: (BuildContext context, GoRouterState state) =>
-                    const ChatDetailsPage())
+                    const ChatDetailsPage()) */
           ])
     ],
   );
