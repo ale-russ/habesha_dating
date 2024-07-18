@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -34,7 +35,7 @@ class ChatDetailsPage extends ConsumerWidget {
     return Scaffold(
         appBar: HomeAppBar(
             centerTitle: false,
-            hasLeading: true,
+            hasLeading: kIsWeb ? false : true,
             color: theme == ThemeMode.dark
                 ? AppColors.secondaryDark
                 : AppColors.secondaryLight,
@@ -57,25 +58,33 @@ class ChatDetailsPage extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(8),
+                        // height: 60,
+                        // width: 60,
+                        // padding: const EdgeInsets.all(8),
                         decoration: const BoxDecoration(shape: BoxShape.circle),
                         child: ClipOval(
-                          child: Image.network(width: 40, height: 40, avatar),
+                          child: Image.network(
+                            width: 40,
+                            height: 40,
+                            avatar,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
+                      const SizedBox(width: 4),
                       Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'John Abraham',
+                              name,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!
                                   .copyWith(
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       color: theme != ThemeMode.dark
                                           ? AppColors.secondaryDark
                                           : AppColors.secondaryLight),
@@ -100,15 +109,15 @@ class ChatDetailsPage extends ConsumerWidget {
                 ),
                 Positioned(
                   top: 30,
-                  left: 40,
+                  left: 28,
                   child: Container(
                     width: 10,
                     height: 10,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: isOnline
-                          ? AppColors.offlineColor
-                          : AppColors.primaryLightColor,
+                          ? AppColors.onlineColor
+                          : AppColors.offlineColor,
                     ),
                   ),
                 ),

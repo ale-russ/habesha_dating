@@ -21,33 +21,27 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   final userState = ref.watch(userProvider);
 
   return GoRouter(
-    // initialLocation: userState.value != null ? "/home" : "/intro",
-    initialLocation: "/home",
-    // redirect: (context, state) {
-    //   final isLoggingIn = state.matchedLocation == "/home";
+    initialLocation: userState.value == null ? "/intro" : "/home",
+    redirect: (context, state) {
+      userState.when(
+          data: (user) {
+            log("userState in async: ${userState.value}");
 
-    // redirect: (context, state) {
-    //   userState.when(
-    //       data: (user) {
-    //         log("userState in async: ${userState.value}");
-    //         final isLoggedIn = state.matchedLocation == "/home";
-    //         final isSigningUP = state.matchedLocation == "/signup";
-    //         final isLoggingIn = state.matchedLocation == "/login";
+            final isSigningUP = state.matchedLocation == "/signup";
+            final isLoggingIn = state.matchedLocation == "/login";
 
-    //         log("STATE: ${isLoggingIn}");
-
-    //         if (user != null) {
-    //           return "/home";
-    //         } else if (isLoggingIn) {
-    //           return "/login";
-    //         } else if (isSigningUP) {
-    //           return "/signup";
-    //         }
-    //       },
-    //       error: (_, stackTrace) => null,
-    //       loading: () => null);
-    //   return null;
-    // },
+            if (user != null) {
+              return "/home";
+            } else if (isLoggingIn) {
+              return "/login";
+            } else if (isSigningUP) {
+              return "/signup";
+            }
+          },
+          error: (_, stackTrace) => null,
+          loading: () => const Loader());
+      return null;
+    },
     routes: <RouteBase>[
       GoRoute(
         path: "/",

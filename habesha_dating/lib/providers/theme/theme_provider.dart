@@ -1,12 +1,50 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habesha_dating/helpers/theme_preference.dart';
+
+import '/helpers/theme_preference.dart';
+import '/utils/db_access.dart';
+import '/utils/utility_methods.dart';
 
 final themeProvider = StateNotifierProvider<ThemeNotifier, ThemeMode>((ref) {
   return ThemeNotifier();
 });
+
+final isDarkModeProvider =
+    NotifierProvider<IsDarkModeNotifier, bool>(IsDarkModeNotifier.new);
+
+class IsDarkModeNotifier extends Notifier<bool> {
+  @override
+  bool build() {
+    determineAppThemeMode();
+    return true;
+  }
+
+  void changeThemeMode(String? themeMode) async {
+    await DbAccess.writeData('themeMode', determineAppThemeMode(themeMode));
+
+    setSystemUIOverlayStyle(isInDarkMode: state);
+  }
+
+  String determineAppThemeMode([String? newTheme]) {
+    switch (newTheme ?? DbAccess.readData("themeMode")) {
+      case 'light':
+        state = false;
+        return 'light';
+      case 'deviceThemeMode':
+        state = deviceThemeMode;
+        return "system_default";
+      default:
+        state = true;
+        return 'dark';
+    }
+  }
+
+  bool get deviceThemeMode =>
+      PlatformDispatcher.instance.platformBrightness == Brightness.dark;
+}
 
 class ThemeNotifier extends StateNotifier<ThemeMode> {
   ThemeNotifier() : super(ThemeMode.light) {

@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 
+import '../../providers/theme/theme_provider.dart';
 import '/providers/bottom_nav_provider.dart';
-// import '/providers/theme/theme_provider.dart';
-
 import '../../themes/app_colors.dart';
 
 class BottomNavBar extends ConsumerWidget {
-  const BottomNavBar({super.key});
+  const BottomNavBar({super.key, required this.onTap});
+  final Function(int) onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(bottomNavBarIndexProvider);
-    // final theme = ref.watch(themeProvider);
+    final themeMode = ref.watch(themeProvider);
 
     return BottomNavigationBar(
-      // type: BottomNavigationBarType.fixed,
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: themeMode == ThemeMode.dark
+          ? AppColors.darkAddIconBorderColor
+          : AppColors.secondaryLight,
       currentIndex: currentIndex,
-      onTap: (index) {
-        ref.read(bottomNavBarIndexProvider.notifier).state = index;
-      },
+      onTap: onTap,
       items: [
         BottomNavigationBarItem(
           icon: Column(
@@ -34,11 +34,14 @@ class BottomNavBar extends ConsumerWidget {
                     ? AppColors.primaryDarkColor
                     : AppColors.darkGreyDarkColor,
               ),
-              Text("Messages",
-                  style: TextStyle(
-                      color: currentIndex == 0
-                          ? AppColors.primaryDarkColor
-                          : AppColors.darkGreyDarkColor))
+              Text(
+                "Messages",
+                style: TextStyle(
+                  color: currentIndex == 0
+                      ? AppColors.primaryDarkColor
+                      : AppColors.darkGreyDarkColor,
+                ),
+              )
             ],
           ),
           label: '',
@@ -53,11 +56,14 @@ class BottomNavBar extends ConsumerWidget {
                   ? AppColors.primaryDarkColor
                   : AppColors.darkGreyDarkColor,
             ),
-            Text("Calls",
-                style: TextStyle(
-                    color: currentIndex == 1
-                        ? AppColors.primaryDarkColor
-                        : AppColors.darkGreyDarkColor)),
+            Text(
+              "Calls",
+              style: TextStyle(
+                color: currentIndex == 1
+                    ? AppColors.primaryDarkColor
+                    : AppColors.darkGreyDarkColor,
+              ),
+            ),
           ]),
           label: '',
         ),
@@ -71,11 +77,14 @@ class BottomNavBar extends ConsumerWidget {
                   ? AppColors.primaryDarkColor
                   : AppColors.darkGreyDarkColor,
             ),
-            Text("Contacts",
-                style: TextStyle(
-                    color: currentIndex == 2
-                        ? AppColors.primaryDarkColor
-                        : AppColors.darkGreyDarkColor))
+            Text(
+              "Contacts",
+              style: TextStyle(
+                color: currentIndex == 2
+                    ? AppColors.primaryDarkColor
+                    : AppColors.darkGreyDarkColor,
+              ),
+            )
           ]),
           label: '',
         ),
@@ -89,11 +98,14 @@ class BottomNavBar extends ConsumerWidget {
                   ? AppColors.primaryDarkColor
                   : AppColors.darkGreyDarkColor,
             ),
-            Text("Settings",
-                style: TextStyle(
-                    color: currentIndex == 3
-                        ? AppColors.primaryDarkColor
-                        : AppColors.darkGreyDarkColor))
+            Text(
+              "Settings",
+              style: TextStyle(
+                color: currentIndex == 3
+                    ? AppColors.primaryDarkColor
+                    : AppColors.darkGreyDarkColor,
+              ),
+            )
           ]),
           label: '',
         ),

@@ -14,4 +14,8 @@ class AuthRepository {
       String email, String password, String name, Uint8List? imageFile) async {
     return await _authService.register(email, password, name, imageFile);
   }
+
+  Future<List<String>> fetchImageUrl() async {
+    return await _authService.fetchImages();
+  }
 }

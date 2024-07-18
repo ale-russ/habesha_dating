@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'dart:typed_data';
 
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,5 +67,15 @@ class AuthService {
     } catch (err) {
       rethrow;
     }
+  }
+
+  // Demo image fetching
+  Future<List<String>> fetchImages() async {
+    final String response = await rootBundle.loadString("assets/data.json");
+    final data = json.decode(response);
+    final imageData = List<String>.from(data["imageUrls"]);
+    // log("ImageData ${imageData}");
+    // return data["imageUrls"];
+    return imageData;
   }
 }

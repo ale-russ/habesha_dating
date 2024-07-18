@@ -35,57 +35,10 @@ class HomePage extends ConsumerWidget {
       backgroundColor: themeMode == ThemeMode.light
           ? AppColors.headingLightColor
           : AppColors.primaryDarkColor,
-      appBar: HomeAppBar(
-        hasLeading: true,
-        leading: Container(
-          // margin: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              // shape: BoxShape.circle,
-              border: Border.all(
-                  color: themeMode == ThemeMode.light
-                      ? AppColors.borderLightColor
-                      : AppColors.borderDarkColor,
-                  width: 1)),
-          child: IconButton(
-            icon: const Icon(
-              Icons.search_rounded,
-              color: AppColors.secondaryLight,
-            ),
-            onPressed: () {
-              ref.read(userProvider.notifier).logout();
-              context.pushReplacement("/intro");
-            },
-          ),
-        ),
-        title: Text(
-          "Home",
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge!
-              .copyWith(color: AppColors.secondaryLight),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: ClipOval(
-              child: Image.network(
-                  width: 40,
-                  height: 40,
-                  "https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"),
-            ),
-          ),
-        ],
-      ),
       body: pages[currentIndex],
-      bottomNavigationBar: Container(
-        height: 80,
-        width: size.width,
-        decoration: BoxDecoration(
-            color: themeMode == ThemeMode.light
-                ? AppColors.secondaryLight
-                : AppColors.darkAddIconBorderColor),
-        child: const BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(
+        onTap: (index) =>
+            ref.watch(bottomNavBarIndexProvider.notifier).state = index,
       ),
     );
   }
