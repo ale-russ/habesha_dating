@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:habesha_dating/screens/home/chat_details.dart';
 
+import '../screens/home/chat_details.dart';
 import '/widgets/common/loader.dart';
 import '/screens/home/call_page.dart';
 import '/screens/home/contacts_page.dart';
@@ -19,7 +19,7 @@ import "/screens/home/home.dart";
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final userState = ref.watch(userProvider);
-
+  log("USERSTATE: ${userState.value}");
   return GoRouter(
     initialLocation: userState.value == null ? "/intro" : "/home",
     redirect: (context, state) {
@@ -36,16 +36,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               return "/login";
             } else if (isSigningUP) {
               return "/signup";
+            } else {
+              return "/intro";
             }
           },
           error: (_, stackTrace) => null,
-          loading: () => const Loader());
+          loading: () => "/loader");
       return null;
     },
     routes: <RouteBase>[
       GoRoute(
         path: "/",
         builder: (BuildContext context, GoRouterState state) => const Logo(),
+      ),
+      GoRoute(
+        path: "/loader",
+        builder: (context, state) => const Loader(),
       ),
       GoRoute(
         path: "/intro",
@@ -86,11 +92,20 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 path: "settings",
                 builder: (BuildContext context, GoRouterState state) =>
                     const SettingsPage()),
-            /*  GoRoute(
+            GoRoute(
                 path: "chat",
                 name: "/chat",
-                builder: (BuildContext context, GoRouterState state) =>
-                    const ChatDetailsPage()) */
+                builder: (BuildContext context, GoRouterState state) {
+                  final isOnline = state.uri.queryParameters["isOline"];
+                  final name = state.uri.queryParameters["name"];
+                  final avatar = state.uri.queryParameters["avatar"];
+
+                  return ChatDetailsPage(
+                    isOnline: bool.tryParse(isOnline!)!,
+                    name: name!,
+                    avatar: avatar!,
+                  );
+                })
           ])
     ],
   );

@@ -135,7 +135,6 @@ class ImageNotifier extends StateNotifier<AsyncValue<List<String>>> {
   final Ref _ref;
 
   Future<void> fetchImage() async {
-    log("in provider");
     state = const AsyncValue.loading();
     try {
       final image = await _ref.read(authRepositoryProvider).fetchImageUrl();

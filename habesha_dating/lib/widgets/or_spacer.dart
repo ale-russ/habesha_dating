@@ -23,7 +23,7 @@ class OrSpacer extends ConsumerWidget {
             ),
           ),
           const Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
               "OR",
               style: TextStyle(

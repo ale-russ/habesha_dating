@@ -27,13 +27,19 @@ class CustomTextForm extends ConsumerWidget {
           horizontal: 24.0, vertical: kIsWeb ? 16 : 2),
       child: TextFormField(
         onChanged: onChanged,
-        style: TextStyle(
-          color: themeMode == ThemeMode.dark
-              ? AppColors.headingDarkColor
-              : AppColors.headingLightColor,
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-        ),
+        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+            fontSize: 13,
+            fontWeight: FontWeight.normal,
+            color: themeMode == ThemeMode.dark
+                ? AppColors.headingDarkColor
+                : AppColors.headingLightColor),
+        // style: TextStyle(
+        //   color: themeMode == ThemeMode.dark
+        //       ? AppColors.headingDarkColor
+        //       : AppColors.headingLightColor,
+        //   fontSize: 12,
+        //   fontWeight: FontWeight.w400,
+        // ),
         obscureText: obscureText,
         controller: controller,
         decoration: InputDecoration(
