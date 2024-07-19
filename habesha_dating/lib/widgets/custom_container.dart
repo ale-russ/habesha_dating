@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:get/get.dart";
 
 import '/providers/theme/theme_provider.dart';
 
@@ -19,8 +20,8 @@ class CustomContainer extends ConsumerWidget {
     final size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
-      height: size.height * 0.7,
-      padding: const EdgeInsets.only(top: 16),
+      height: !GetPlatform.isMobile ? size.height : size.height * 0.7,
+      padding: EdgeInsets.only(top: 16, bottom: GetPlatform.isMobile ? 0 : 16),
       decoration: BoxDecoration(
         color: theme == ThemeMode.light
             ? AppColors.secondaryLight

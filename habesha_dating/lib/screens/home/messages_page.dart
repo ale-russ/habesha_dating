@@ -4,9 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:habesha_dating/screens/home/chat_details.dart';
-import 'package:habesha_dating/widgets/home/home_wrapper.dart';
 
+import '/screens/home/chat_details.dart';
+import '/widgets/home/home_wrapper.dart';
 import '../../providers/auth/auth_provider.dart';
 import '../../providers/loading_provider.dart';
 import '../../widgets/common/home_appbar.dart';

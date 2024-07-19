@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '/screens/settings/account_page.dart';
 import '../screens/home/chat_details.dart';
 import '/widgets/common/loader.dart';
 import '/screens/home/call_page.dart';
@@ -21,8 +22,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   final userState = ref.watch(userProvider);
   log("USERSTATE: ${userState.value}");
   return GoRouter(
-    initialLocation: userState.value == null ? "/intro" : "/home",
-    redirect: (context, state) {
+    // initialLocation: userState.value == null ? "/intro" : "/home",
+    initialLocation: "/home",
+    /* redirect: (context, state) {
       userState.when(
           data: (user) {
             log("userState in async: ${userState.value}");
@@ -43,7 +45,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           error: (_, stackTrace) => null,
           loading: () => "/loader");
       return null;
-    },
+    }, */
     routes: <RouteBase>[
       GoRoute(
         path: "/",
@@ -91,7 +93,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             GoRoute(
                 path: "settings",
                 builder: (BuildContext context, GoRouterState state) =>
-                    const SettingsPage()),
+                    const SettingsPage(),
+                routes: [
+                  GoRoute(
+                    path: "account",
+                    builder: (context, state) {
+                      return const AccountPage();
+                    },
+                  )
+                ]),
             GoRoute(
                 path: "chat",
                 name: "/chat",
