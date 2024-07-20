@@ -4,10 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:habesha_dating/images.dart';
 
 import '../../widgets/common/loader.dart';
+import '../../widgets/common/toggle_button.dart';
 import '/widgets/custom_container.dart';
 import '../../providers/auth/auth_provider.dart';
 import '../../providers/theme/theme_provider.dart';
@@ -67,108 +69,165 @@ class SettingsPage extends ConsumerWidget {
         child: Container(
           margin: const EdgeInsets.only(top: 72),
           child: CustomContainer(
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Color(0XFFF5F6F6),
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: GetPlatform.isMobile ? 16 : 24),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Color(0XFFF5F6F6),
+                          ),
                         ),
                       ),
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 8),
-                        Row(
-                          children: [
-                            ClipOval(
-                              child: CachedNetworkImage(
-                                imageUrl: images[0],
-                                fit: BoxFit.fill,
-                                width: 50,
-                                height: 50,
-                                placeholder: (context, url) => const Loader(),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 8),
+                          Row(
+                            children: [
+                              ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: images[3],
+                                  fit: BoxFit.fill,
+                                  width: 50,
+                                  height: 50,
+                                  placeholder: (context, url) => const Loader(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "James Madison",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displayMedium!
-                                      .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
+                              const SizedBox(width: 8),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "James Madison",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displayMedium!
+                                        .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: theme == ThemeMode.dark
+                                                ? AppColors.headingDarkColor
+                                                : AppColors.headingLightColor),
+                                  ),
+                                  Text(
+                                    'Personal Motto',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall!
+                                        .copyWith(
+                                          fontSize: 12,
                                           color: theme == ThemeMode.dark
-                                              ? AppColors.headingDarkColor
-                                              : AppColors.headingLightColor),
-                                ),
-                                Text(
-                                  'Personal Motto',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall!
-                                      .copyWith(
-                                        fontSize: 12,
-                                        color: theme == ThemeMode.dark
-                                            ? AppColors.secondaryLight
-                                            : AppColors.darkGreyDarkColor,
-                                      ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ],
+                                              ? AppColors.secondaryLight
+                                              : AppColors.darkGreyDarkColor,
+                                        ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SettingsMenu(
-                    icon: Icons.key,
-                    title: 'Account',
-                    label: 'Privacy, security, change number',
-                    onTap: () {
-                      context.push("home/settings/account");
-                    }),
-                SettingsMenu(
-                    icon: CupertinoIcons.chat_bubble,
-                    title: 'Chat',
-                    label: 'Chat history, theme, wallpaper',
-                    onTap: () {}),
-                SettingsMenu(
-                    icon: CupertinoIcons.bell,
-                    title: 'Notifications',
-                    label: 'Messages, group and others',
-                    onTap: () {}),
-                SettingsMenu(
-                    icon: Icons.help_outline,
-                    title: 'Help',
-                    label: 'Help center, contact us, privacy policy',
-                    onTap: () {}),
-                SettingsMenu(
-                    icon: CupertinoIcons.download_circle,
-                    title: 'Storage and data',
-                    label: 'Network usage, storage usage',
-                    onTap: () {}),
-                SettingsMenu(
-                  icon: CupertinoIcons.person_2,
-                  title: 'Invite friend',
-                  onTap: () {},
-                ),
-              ],
+                  AccountIconsTile(theme: theme)
+                ],
+              ),
             ),
           ),
         ));
+  }
+}
+
+class AccountIconsTile extends ConsumerWidget {
+  const AccountIconsTile({
+    super.key,
+    required this.theme,
+  });
+
+  final ThemeMode theme;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeProvider);
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      height: 400,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SettingsMenu(
+                icon: CupertinoIcons.profile_circled,
+                title: 'Account',
+                label: 'Privacy, security, change number',
+                onTap: () {
+                  context.push("/home/settings/account");
+                }),
+            SettingsMenu(
+                icon: CupertinoIcons.chat_bubble,
+                title: 'Chat',
+                label: 'Chat history, theme, wallpaper',
+                onTap: () {}),
+            SettingsMenu(
+                icon: CupertinoIcons.bell,
+                title: 'Notifications',
+                label: 'Messages, group and others',
+                onTap: () {}),
+            SettingsMenu(
+                icon: Icons.help_outline,
+                title: 'Help',
+                label: 'Help center, contact us, privacy policy',
+                onTap: () {}),
+            SettingsMenu(
+                icon: CupertinoIcons.cube_box,
+                title: 'Storage and data',
+                label: 'Network usage, storage usage',
+                onTap: () {}),
+            SettingsMenu(
+              icon: CupertinoIcons.person_add,
+              title: 'Invite friend',
+              label: "Invite your friends and earn some",
+              onTap: () {},
+            ),
+            ListTile(
+              dense: true,
+              horizontalTitleGap: 30,
+              leading: Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: theme == ThemeMode.dark
+                        ? AppColors.shareDarkColor
+                        : AppColors.sharedLightColor,
+                    shape: BoxShape.circle),
+                child: ThemeToggleButton(
+                    color: theme == ThemeMode.dark
+                        ? AppColors.darkGreyDarkColor
+                        : AppColors.darkGreyLightColor),
+              ),
+              title: Text(
+                "Theme",
+                style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: theme == ThemeMode.dark
+                          ? AppColors.headingDarkColor
+                          : AppColors.headingLightColor,
+                    ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -189,7 +248,7 @@ class SettingsMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: EdgeInsets.symmetric(vertical: GetPlatform.isMobile ? 4 : 16.0),
       child: ListTile(
         onTap: onTap,
         dense: true,
@@ -225,7 +284,7 @@ class SettingsMenu extends ConsumerWidget {
               style: Theme.of(context).textTheme.labelSmall!.copyWith(
                     fontSize: 12,
                     color: theme == ThemeMode.dark
-                        ? AppColors.secondaryLight
+                        ? AppColors.darkGreyLightColor
                         : AppColors.darkGreyDarkColor,
                   ),
             )

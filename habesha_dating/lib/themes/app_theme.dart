@@ -7,10 +7,15 @@ class AppThemes {
     useMaterial3: true,
     primaryColor: AppColors.primaryLightColor,
     colorScheme: const ColorScheme.light(
-      brightness: Brightness.dark,
+      brightness: Brightness.light,
       primary: AppColors.primaryLightColor,
       secondary: AppColors.secondaryLight,
       error: AppColors.lightErrorColor,
+      surface: AppColors.headingLightColor,
+      onPrimary: AppColors.primaryLightColor,
+      onSecondary: AppColors.secondaryLight,
+      onError: AppColors.lightErrorColor,
+      onSurface: AppColors.headingLightColor,
     ),
     textTheme: const TextTheme(
       bodyLarge:
@@ -57,10 +62,6 @@ class AppThemes {
       ),
     ),
     fontFamily: 'Caros',
-
-    /* splashColor: Colors.transparent,
-    highlightColor: Colors.transparent,
-    splashFactory: NoSplash.splashFactory, */
   );
 
   static final darkTheme = ThemeData(
@@ -71,6 +72,11 @@ class AppThemes {
         primary: AppColors.primaryDarkColor,
         secondary: AppColors.secondaryDark,
         error: AppColors.darkErrorColor,
+        surface: AppColors.headingDarkColor,
+        onPrimary: AppColors.primaryDarkColor,
+        onSecondary: AppColors.secondaryDark,
+        onError: AppColors.darkErrorColor,
+        onSurface: AppColors.headingDarkColor,
       ),
       textTheme: const TextTheme(
         bodyLarge:

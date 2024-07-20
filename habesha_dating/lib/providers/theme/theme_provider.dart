@@ -22,12 +22,6 @@ class IsDarkModeNotifier extends Notifier<bool> {
     return true;
   }
 
-  void changeThemeMode(String? themeMode) async {
-    await DbAccess.writeData('themeMode', determineAppThemeMode(themeMode));
-
-    setSystemUIOverlayStyle(isInDarkMode: state);
-  }
-
   String determineAppThemeMode([String? newTheme]) {
     switch (newTheme ?? DbAccess.readData("themeMode")) {
       case 'light':

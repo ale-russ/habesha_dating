@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:habesha_dating/screens/settings/account_page.dart';
 
-import '/screens/settings/account_page.dart';
 import '../screens/home/chat_details.dart';
 import '/widgets/common/loader.dart';
 import '/screens/home/call_page.dart';
@@ -24,7 +24,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     // initialLocation: userState.value == null ? "/intro" : "/home",
     initialLocation: "/home",
-    /* redirect: (context, state) {
+    redirect: (context, state) {
       userState.when(
           data: (user) {
             log("userState in async: ${userState.value}");
@@ -45,7 +45,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           error: (_, stackTrace) => null,
           loading: () => "/loader");
       return null;
-    }, */
+    },
     routes: <RouteBase>[
       GoRoute(
         path: "/",
@@ -80,9 +80,24 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             GoRoute(
                 path: "messages",
                 builder: (BuildContext context, GoRouterState state) =>
-                    const MessagesPage()),
+                    const MessagesPage(),
+                routes: [
+                  GoRoute(
+                      path: "chat",
+                      name: "/chat",
+                      builder: (BuildContext context, GoRouterState state) {
+                        final isOnline = state.uri.queryParameters["isOline"];
+                        final name = state.uri.queryParameters["name"];
+                        final avatar = state.uri.queryParameters["avatar"];
+
+                        return ChatDetailsPage(
+                          isOnline: bool.tryParse(isOnline!)!,
+                          name: name!,
+                          avatar: avatar!,
+                        );
+                      })
+                ]),
             GoRoute(
-                name: "/call",
                 path: "call",
                 builder: (BuildContext context, GoRouterState state) =>
                     const CallPage()),
@@ -97,25 +112,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 routes: [
                   GoRoute(
                     path: "account",
-                    builder: (context, state) {
-                      return const AccountPage();
-                    },
-                  )
+                    builder: (BuildContext context, GoRouterState state) =>
+                        AccountPage(),
+                  ),
                 ]),
-            GoRoute(
-                path: "chat",
-                name: "/chat",
-                builder: (BuildContext context, GoRouterState state) {
-                  final isOnline = state.uri.queryParameters["isOline"];
-                  final name = state.uri.queryParameters["name"];
-                  final avatar = state.uri.queryParameters["avatar"];
-
-                  return ChatDetailsPage(
-                    isOnline: bool.tryParse(isOnline!)!,
-                    name: name!,
-                    avatar: avatar!,
-                  );
-                })
           ])
     ],
   );

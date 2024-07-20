@@ -6,15 +6,15 @@ import '../../providers/theme/theme_provider.dart';
 import '../../themes/app_colors.dart';
 
 class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  const HomeAppBar({
-    super.key,
-    this.leading,
-    this.actions,
-    this.title,
-    this.color,
-    this.hasLeading = false,
-    this.centerTitle = true,
-  });
+  const HomeAppBar(
+      {super.key,
+      this.leading,
+      this.actions,
+      this.title,
+      this.color,
+      this.hasLeading = false,
+      this.centerTitle = true,
+      this.onPressed});
 
   final Widget? leading;
   final Widget? title;
@@ -22,7 +22,7 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final Color? color;
   final bool hasLeading;
   final bool centerTitle;
-
+  final void Function()? onPressed;
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
@@ -46,7 +46,7 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
                   Icons.arrow_back,
                   color: AppColors.secondaryLight,
                 ),
-            onPressed: () {},
+            onPressed: onPressed ?? () {},
           );
         },
       ),
