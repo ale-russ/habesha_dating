@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:habesha_dating/images.dart';
 
+import '/images.dart';
 import '../../widgets/common/loader.dart';
 import '../../widgets/common/toggle_button.dart';
 import '/widgets/custom_container.dart';
-import '../../providers/auth/auth_provider.dart';
 import '../../providers/theme/theme_provider.dart';
 import '../../themes/app_colors.dart';
 import '../../widgets/common/home_appbar.dart';
@@ -25,46 +24,14 @@ class SettingsPage extends ConsumerWidget {
     final theme = ref.watch(themeProvider);
     return HomeWrapper(
         appbar: HomeAppBar(
-          hasLeading: true,
-          leading: Container(
-            // margin: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                // shape: BoxShape.circle,
-                border: Border.all(
-                    color: theme == ThemeMode.light
-                        ? AppColors.borderLightColor
-                        : AppColors.borderDarkColor,
-                    width: 1)),
-            child: IconButton(
-              icon: const Icon(
-                Icons.search_rounded,
-                color: AppColors.secondaryLight,
-              ),
-              onPressed: () {
-                ref.read(userProvider.notifier).logout();
-                context.pushReplacement("/intro");
-              },
-            ),
-          ),
+          hasLeading: false,
           title: Text(
-            "Home",
+            "Settings",
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge!
                 .copyWith(color: AppColors.secondaryLight),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: ClipOval(
-                child: Image.network(
-                    width: 40,
-                    height: 40,
-                    "https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"),
-              ),
-            ),
-          ],
         ),
         child: Container(
           margin: const EdgeInsets.only(top: 72),
@@ -158,9 +125,10 @@ class AccountIconsTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
+    final size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      height: 400,
+      height: GetPlatform.isMobile ? 400 : size.height,
       child: SingleChildScrollView(
         child: Column(
           children: [

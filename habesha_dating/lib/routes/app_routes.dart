@@ -74,8 +74,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
           path: "/home",
-          builder: (BuildContext context, GoRouterState state) =>
-              const HomePage(),
+          builder: (BuildContext context, GoRouterState state) => HomePage(),
           routes: [
             GoRoute(
                 path: "messages",
@@ -101,10 +100,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 path: "call",
                 builder: (BuildContext context, GoRouterState state) =>
                     const CallPage()),
-            GoRoute(
+            /* GoRoute(
                 path: "contacts",
-                builder: (BuildContext context, GoRouterState state) =>
-                    const ContactsPage()),
+                builder: (BuildContext context, GoRouterState state) 
+                    {return ContactsPage(contacts: state.extra['contacts'],)}), */
             GoRoute(
                 path: "settings",
                 builder: (BuildContext context, GoRouterState state) =>

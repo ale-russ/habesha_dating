@@ -1,7 +1,13 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:habesha_dating/images.dart';
+import 'package:habesha_dating/widgets/custom_container.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 
+import '../../models/contacts_model.dart';
 import '../../providers/auth/auth_provider.dart';
 import '../../providers/theme/theme_provider.dart';
 import '../../themes/app_colors.dart';
@@ -9,19 +15,36 @@ import '../../widgets/common/home_appbar.dart';
 import '../../widgets/home/home_wrapper.dart';
 
 class ContactsPage extends ConsumerWidget {
-  const ContactsPage({super.key});
+  ContactsPage({super.key, required this.contacts});
+
+  final List<Contact> contacts;
+  Map<String, List<Contact>> groupedContacts = {};
+  List<String> sortedKeys = [];
+
+  void groupContacts() {
+    for (var contact in contacts) {
+      if (groupedContacts[contact.initial] == null) {
+        groupedContacts[contact.initial] = [];
+        sortedKeys.add(contact.initial);
+      }
+      groupedContacts[contact.initial]!.add(contact);
+    }
+
+    // sort the keys alphabetically
+    sortedKeys.sort();
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
+    groupContacts();
+
     return HomeWrapper(
       appbar: HomeAppBar(
         hasLeading: true,
         leading: Container(
-          // margin: const EdgeInsets.all(6),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
-              // shape: BoxShape.circle,
               border: Border.all(
                   color: theme == ThemeMode.light
                       ? AppColors.borderLightColor
@@ -39,7 +62,7 @@ class ContactsPage extends ConsumerWidget {
           ),
         ),
         title: Text(
-          "Home",
+          "Contacts",
           style: Theme.of(context)
               .textTheme
               .bodyLarge!
@@ -48,17 +71,47 @@ class ContactsPage extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: ClipOval(
-              child: Image.network(
-                  width: 40,
-                  height: 40,
-                  "https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"),
-            ),
+            icon: const ClipOval(
+                child: Icon(
+              Icons.person_add_alt_1_outlined,
+              color: AppColors.secondaryLight,
+            )),
           ),
         ],
       ),
-      child: const Center(
-        child: Text("Contacts Page"),
+      child: Container(
+        margin: const EdgeInsets.only(top: 72),
+        child: CustomContainer(
+          child: ListView.builder(
+            itemCount: sortedKeys.length,
+            itemBuilder: (context, index) {
+              String initial = sortedKeys[index];
+              List<Contact> contactsByInitial = groupedContacts[initial]!;
+
+              return StickyHeader(
+                  header: Container(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Text(
+                      initial,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                  content: Column(
+                    children: contactsByInitial.map(
+                      (contact) {
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(images[index]),
+                          ),
+                          title: Text(contact.name),
+                          subtitle: Text(contact.status),
+                        );
+                      },
+                    ).toList(),
+                  ));
+            },
+          ),
+        ),
       ),
     );
   }

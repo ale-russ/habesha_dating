@@ -1,8 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:habesha_dating/images.dart';
 import 'package:habesha_dating/models/user_model.dart';
@@ -48,7 +49,7 @@ class AccountPage extends ConsumerWidget {
                   ),
                   Text(
                     // (user!.username) ??
-                    "Mekseb Alem",
+                    "James Madison",
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
@@ -93,7 +94,7 @@ class AccountPage extends ConsumerWidget {
             const CustomContainer(
               child: Column(
                 children: [
-                  UserDetails(label: "Display Name", title: "Mekseb Alem"),
+                  UserDetails(label: "Display Name", title: "James Madison"),
                   UserDetails(
                       label: "Email Address", title: "mekseb@gmail.com"),
                   UserDetails(
@@ -149,7 +150,7 @@ class AccountIcons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
-    final size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
     return Expanded(
       child: SizedBox(
           height: 40,
