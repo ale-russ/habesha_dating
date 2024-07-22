@@ -1,13 +1,13 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:habesha_dating/images.dart';
 
+import '/images.dart';
 import '../../widgets/common/loader.dart';
 import '../../widgets/common/toggle_button.dart';
 import '/widgets/custom_container.dart';
@@ -27,10 +27,8 @@ class SettingsPage extends ConsumerWidget {
         appbar: HomeAppBar(
           hasLeading: true,
           leading: Container(
-            // margin: const EdgeInsets.all(6),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
-                // shape: BoxShape.circle,
                 border: Border.all(
                     color: theme == ThemeMode.light
                         ? AppColors.borderLightColor
@@ -48,23 +46,12 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
           title: Text(
-            "Home",
+            "Settings",
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge!
                 .copyWith(color: AppColors.secondaryLight),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: ClipOval(
-                child: Image.network(
-                    width: 40,
-                    height: 40,
-                    "https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp"),
-              ),
-            ),
-          ],
         ),
         child: Container(
           margin: const EdgeInsets.only(top: 72),
@@ -79,10 +66,12 @@ class SettingsPage extends ConsumerWidget {
                       padding: EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: GetPlatform.isMobile ? 16 : 24),
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            color: Color(0XFFF5F6F6),
+                            color: theme == ThemeMode.dark
+                                ? AppColors.darkGreyDarkColor.withOpacity(0.1)
+                                : AppColors.darkGreyLightColor.withOpacity(0.1),
                           ),
                         ),
                       ),
@@ -126,7 +115,7 @@ class SettingsPage extends ConsumerWidget {
                                         .copyWith(
                                           fontSize: 12,
                                           color: theme == ThemeMode.dark
-                                              ? AppColors.secondaryLight
+                                              ? AppColors.darkGreyLightColor
                                               : AppColors.darkGreyDarkColor,
                                         ),
                                   ),
@@ -159,7 +148,7 @@ class AccountIconsTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.only(bottom: 8),
       height: 400,
       child: SingleChildScrollView(
         child: Column(
@@ -222,6 +211,37 @@ class AccountIconsTile extends ConsumerWidget {
                           ? AppColors.headingDarkColor
                           : AppColors.headingLightColor,
                     ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: ref.read(userProvider.notifier).logout,
+              child: ListTile(
+                dense: true,
+                horizontalTitleGap: 30,
+                leading: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      color: theme == ThemeMode.dark
+                          ? AppColors.shareDarkColor
+                          : AppColors.sharedLightColor,
+                      shape: BoxShape.circle),
+                  child: Icon(Icons.logout,
+                      color: theme == ThemeMode.dark
+                          ? AppColors.darkGreyDarkColor
+                          : AppColors.darkGreyLightColor),
+                ),
+                title: Text(
+                  "Logout",
+                  style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: theme == ThemeMode.dark
+                            ? AppColors.headingDarkColor
+                            : AppColors.headingLightColor,
+                      ),
+                ),
               ),
             ),
           ],

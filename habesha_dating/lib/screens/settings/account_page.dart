@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +32,7 @@ class AccountPage extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 8),
             Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,6 +119,7 @@ class UserDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeProvider);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
       child: Column(
@@ -127,12 +131,15 @@ class UserDetails extends ConsumerWidget {
             style: Theme.of(context)
                 .textTheme
                 .labelSmall!
-                .copyWith(color: AppColors.darkGreyDarkColor, fontSize: 14),
+                .copyWith(color: AppColors.darkGreyDarkColor, fontSize: 12),
           ),
           Text(
             title,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color: Theme.of(context).colorScheme.secondary, fontSize: 18),
+                color: theme == ThemeMode.dark
+                    ? AppColors.secondaryLight
+                    : AppColors.secondaryDark,
+                fontSize: 16),
           ),
         ],
       ),

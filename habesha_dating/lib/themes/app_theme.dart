@@ -9,13 +9,14 @@ class AppThemes {
     colorScheme: const ColorScheme.light(
       brightness: Brightness.light,
       primary: AppColors.primaryLightColor,
+      onPrimary: AppColors.primaryLightColor,
       secondary: AppColors.secondaryLight,
+      onSecondary: AppColors.secondaryDark,
       error: AppColors.lightErrorColor,
       surface: AppColors.headingLightColor,
-      onPrimary: AppColors.primaryLightColor,
-      onSecondary: AppColors.secondaryLight,
       onError: AppColors.lightErrorColor,
       onSurface: AppColors.headingLightColor,
+      tertiary: AppColors.darkGreyLightColor,
     ),
     textTheme: const TextTheme(
       bodyLarge:
@@ -68,16 +69,16 @@ class AppThemes {
       useMaterial3: true,
       primaryColor: AppColors.primaryDarkColor,
       colorScheme: const ColorScheme.dark(
-        brightness: Brightness.dark,
-        primary: AppColors.primaryDarkColor,
-        secondary: AppColors.secondaryDark,
-        error: AppColors.darkErrorColor,
-        surface: AppColors.headingDarkColor,
-        onPrimary: AppColors.primaryDarkColor,
-        onSecondary: AppColors.secondaryDark,
-        onError: AppColors.darkErrorColor,
-        onSurface: AppColors.headingDarkColor,
-      ),
+          brightness: Brightness.dark,
+          primary: AppColors.primaryDarkColor,
+          secondary: AppColors.secondaryDark,
+          onSecondary: AppColors.secondaryLight,
+          error: AppColors.darkErrorColor,
+          surface: AppColors.headingDarkColor,
+          onPrimary: AppColors.primaryDarkColor,
+          onError: AppColors.darkErrorColor,
+          onSurface: AppColors.headingDarkColor,
+          tertiary: AppColors.darkGreyDarkColor),
       textTheme: const TextTheme(
         bodyLarge:
             TextStyle(color: AppColors.darkGreyDarkColor, fontFamily: 'Caros'),
