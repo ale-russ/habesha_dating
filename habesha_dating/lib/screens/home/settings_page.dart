@@ -7,11 +7,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../providers/auth/auth_provider.dart';
 import '/images.dart';
 import '../../widgets/common/loader.dart';
 import '../../widgets/common/toggle_button.dart';
 import '/widgets/custom_container.dart';
-import '../../providers/auth/auth_provider.dart';
 import '../../providers/theme/theme_provider.dart';
 import '../../themes/app_colors.dart';
 import '../../widgets/common/home_appbar.dart';
@@ -25,26 +25,7 @@ class SettingsPage extends ConsumerWidget {
     final theme = ref.watch(themeProvider);
     return HomeWrapper(
         appbar: HomeAppBar(
-          hasLeading: true,
-          leading: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(
-                    color: theme == ThemeMode.light
-                        ? AppColors.borderLightColor
-                        : AppColors.borderDarkColor,
-                    width: 1)),
-            child: IconButton(
-              icon: const Icon(
-                Icons.search_rounded,
-                color: AppColors.secondaryLight,
-              ),
-              onPressed: () {
-                ref.read(userProvider.notifier).logout();
-                context.pushReplacement("/intro");
-              },
-            ),
-          ),
+          hasLeading: false,
           title: Text(
             "Settings",
             style: Theme.of(context)
@@ -147,9 +128,10 @@ class AccountIconsTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
+    final size = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.only(bottom: 8),
-      height: 400,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      height: GetPlatform.isMobile ? 400 : size.height,
       child: SingleChildScrollView(
         child: Column(
           children: [

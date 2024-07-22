@@ -1,3 +1,5 @@
+import 'package:habesha_dating/models/contacts_model.dart';
+
 List images = [
   "https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg",
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEggpHVqWDedhGqOyqh60ah1VdTpdtVAzlRw&s",
@@ -300,3 +302,36 @@ final chat = {
     }
   ]
 };
+
+List<Contact> contacts = [
+  Contact(
+    name: 'Afrin Sabila',
+    status: 'Life is beautiful 👌',
+    imageUrl: 'https://example.com/afrin_sabila.png',
+  ),
+  Contact(
+    name: 'Adil Adnan',
+    status: 'Be your own hero 💪',
+    imageUrl: 'https://example.com/adil_adnan.png',
+  ),
+  Contact(
+    name: 'Bristy Haque',
+    status: 'Keep working ✍',
+    imageUrl: 'https://example.com/bristy_haque.png',
+  ),
+  Contact(
+    name: 'John Borino',
+    status: 'Make yourself proud 😍',
+    imageUrl: 'https://example.com/john_borino.png',
+  ),
+  Contact(
+    name: 'Borsha Akther',
+    status: 'Flowers are beautiful 🌸',
+    imageUrl: 'https://example.com/borsha_akther.png',
+  ),
+  Contact(
+    name: 'Sheik Sadi',
+    status: '',
+    imageUrl: 'https://example.com/sheik_sadi.png',
+  ),
+];
