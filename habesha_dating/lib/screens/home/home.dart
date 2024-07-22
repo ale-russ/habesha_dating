@@ -19,9 +19,7 @@ class HomePage extends ConsumerWidget {
   final List<Widget> pages = [
     const MessagesPage(),
     const CallPage(),
-    ContactsPage(
-      contacts: contacts,
-    ),
+    ContactsPage(),
     const SettingsPage()
   ];
 
