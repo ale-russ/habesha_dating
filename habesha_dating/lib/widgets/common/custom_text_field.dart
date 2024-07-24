@@ -33,13 +33,6 @@ class CustomTextForm extends ConsumerWidget {
             color: themeMode == ThemeMode.dark
                 ? AppColors.headingDarkColor
                 : AppColors.headingLightColor),
-        // style: TextStyle(
-        //   color: themeMode == ThemeMode.dark
-        //       ? AppColors.headingDarkColor
-        //       : AppColors.headingLightColor,
-        //   fontSize: 12,
-        //   fontWeight: FontWeight.w400,
-        // ),
         obscureText: obscureText,
         controller: controller,
         decoration: InputDecoration(

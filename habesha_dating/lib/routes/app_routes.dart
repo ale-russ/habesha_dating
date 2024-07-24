@@ -22,13 +22,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   final userState = ref.watch(userProvider);
   log("USERSTATE: ${userState.value}");
   return GoRouter(
-    // initialLocation: userState.value == null ? "/intro" : "/home",
-    initialLocation: "/home",
+    initialLocation: userState.value == null ? "/intro" : "/home",
+    // initialLocation: "/home",
     redirect: (context, state) {
       userState.when(
           data: (user) {
-            log("userState in async: ${userState.value}");
-
             final isSigningUP = state.matchedLocation == "/signup";
             final isLoggingIn = state.matchedLocation == "/login";
 

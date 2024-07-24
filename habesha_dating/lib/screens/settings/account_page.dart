@@ -11,6 +11,7 @@ import '../../providers/theme/theme_provider.dart';
 import '../../themes/app_colors.dart';
 import '../../widgets/common/loader.dart';
 import '../../widgets/custom_container.dart';
+import '../../widgets/home/home_wrapper.dart';
 
 class AccountPage extends ConsumerWidget {
   AccountPage({super.key});
@@ -19,12 +20,12 @@ class AccountPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
-    return Scaffold(
-      appBar: HomeAppBar(
-        hasLeading: false,
+    return HomeWrapper(
+      appbar: HomeAppBar(
+        hasLeading: true,
         onPressed: () => context.pop(),
       ),
-      body: SingleChildScrollView(
+      child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,21 +48,16 @@ class AccountPage extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    // (user!.username) ??
-                    "James Madison",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: AppColors.secondaryLight),
-                  ),
+                      // (user!.username) ??
+                      "James Madison",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(color: AppColors.secondaryLight)),
                   Text(
-                    // (user!.username) ??
-                    "@meksebalem",
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                        color: theme == ThemeMode.dark
-                            ? AppColors.darkGreyDarkColor
-                            : AppColors.darkGreyLightColor),
-                  ),
+                      // (user!.username) ??
+                      "@meksebalem",
+                      style: Theme.of(context).textTheme.labelSmall!)
                 ],
               ),
             ),
@@ -123,13 +119,7 @@ class UserDetails extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            label,
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall!
-                .copyWith(color: AppColors.darkGreyDarkColor, fontSize: 12),
-          ),
+          Text(label, style: Theme.of(context).textTheme.labelSmall!),
           Text(
             title,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
