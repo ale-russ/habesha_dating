@@ -33,7 +33,7 @@ class CallPage extends ConsumerWidget {
               color: AppColors.secondaryLight,
             ),
             onPressed: () {
-              ref.read(userProvider.notifier).logout();
+              ref.read(authController.notifier).logout();
               context.pushReplacement("/intro");
             },
           ),

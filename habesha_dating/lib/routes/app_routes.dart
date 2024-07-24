@@ -19,16 +19,17 @@ import '/widgets/logo.dart';
 import "/screens/home/home.dart";
 
 final goRouterProvider = Provider<GoRouter>((ref) {
-  final userState = ref.watch(userProvider);
+  final userState = ref.watch(authController);
   log("USERSTATE: ${userState.value}");
   return GoRouter(
-    // initialLocation: userState.value == null ? "/intro" : "/home",
-    initialLocation: "/home",
-    /*  redirect: (context, state) {
+    initialLocation: userState.value == null ? "/intro" : "/home",
+    // initialLocation: "/home",
+    redirect: (context, state) {
       userState.when(
           data: (user) {
             final isSigningUP = state.matchedLocation == "/signup";
             final isLoggingIn = state.matchedLocation == "/login";
+            log('isLoggingIn, $isLoggingIn');
 
             if (user != null) {
               return "/home";
@@ -43,7 +44,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           error: (_, stackTrace) => null,
           loading: () => "/loader");
       return null;
-    }, */
+    },
     routes: <RouteBase>[
       GoRoute(
         path: "/",

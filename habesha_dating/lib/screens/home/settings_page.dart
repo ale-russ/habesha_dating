@@ -159,6 +159,7 @@ class AccountIconsTile extends ConsumerWidget {
               label: "Invite your friends and earn some",
               onTap: () {},
             ),
+            const SizedBox(height: 20),
             ListTile(
               dense: true,
               horizontalTitleGap: 30,
@@ -171,9 +172,7 @@ class AccountIconsTile extends ConsumerWidget {
                         : AppColors.sharedLightColor,
                     shape: BoxShape.circle),
                 child: ThemeToggleButton(
-                    color: theme == ThemeMode.dark
-                        ? AppColors.darkGreyDarkColor
-                        : AppColors.darkGreyLightColor),
+                    color: Theme.of(context).colorScheme.tertiary),
               ),
               title: Text(
                 "Theme",
@@ -186,9 +185,9 @@ class AccountIconsTile extends ConsumerWidget {
                     ),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 28),
             GestureDetector(
-              onTap: ref.read(userProvider.notifier).logout,
+              onTap: ref.read(authController.notifier).logout,
               child: ListTile(
                 dense: true,
                 horizontalTitleGap: 30,
@@ -241,7 +240,8 @@ class SettingsMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: GetPlatform.isMobile ? 4 : 16.0),
+      /* padding: EdgeInsets.symmetric(vertical: GetPlatform.isMobile ? 4 : 16.0), */
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListTile(
         onTap: onTap,
         dense: true,

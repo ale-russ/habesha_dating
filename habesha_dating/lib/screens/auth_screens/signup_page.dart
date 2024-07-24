@@ -159,7 +159,7 @@ class SignupPageState extends ConsumerState<SignupPage> {
                         ref.read(loadingProvider.notifier).state = true;
                         try {
                           await ref
-                              .read(userProvider.notifier)
+                              .read(authController.notifier)
                               .register(
                                   emailController!.text,
                                   passwordController!.text,

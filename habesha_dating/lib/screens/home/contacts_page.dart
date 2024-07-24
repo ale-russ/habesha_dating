@@ -25,7 +25,7 @@ class ContactsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
     final groupedContacts = ref.watch(contactsProvider);
-    log("THEME: ${Theme.of(context).colorScheme.secondary}");
+    log("groupedContacts: $groupedContacts");
     return groupedContacts.when(
       data: (groupContacts) {
         final sortedKeys = groupContacts.keys.toList();
@@ -47,7 +47,7 @@ class ContactsPage extends ConsumerWidget {
                   color: AppColors.secondaryLight,
                 ),
                 onPressed: () {
-                  ref.read(userProvider.notifier).logout();
+                  ref.read(authController.notifier).logout();
                   context.pushReplacement("/intro");
                 },
               ),
