@@ -2,18 +2,21 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habesha_dating/providers/auth/auth_provider.dart';
-import 'package:habesha_dating/widgets/common/loader.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:habesha_dating/widgets/common/profile_image.dart';
+import 'package:habesha_dating/widgets/common/shimmer.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../models/images_model.dart';
+import '/widgets/common/loader.dart';
+import '/providers/online_contacts_image_provider.dart';
 import '/images.dart';
-import '../../providers/color_palett_provider.dart';
 import '../../themes/app_colors.dart';
 
 class OnlineContacts extends ConsumerWidget {
-  OnlineContacts({super.key});
+  const OnlineContacts({super.key});
 
-  final ScrollController controller = ScrollController();
+  // final ScrollController controller = ScrollController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,64 +35,69 @@ class OnlineContacts extends ConsumerWidget {
 }
 
 class CustomProfileImage extends ConsumerWidget {
-  const CustomProfileImage({
-    super.key,
-  });
+  const CustomProfileImage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final imageProvider = ref.watch(imageUrlProvider);
-    final colorProviderNotifier = ref.read(colorProvider.notifier);
-    final colors = ref.watch(colorProvider);
-
     return imageProvider.when(
-        data: (data) {
-          return Row(
-              children: List.generate(data.length, (index) {
-            final imageUrl = data[index];
-            if (!colors.containsKey(imageUrl)) {
-              colorProviderNotifier.getDominantColor(imageUrl);
-            }
+      data: (data) => OnlineContactsList(
+        data: data,
+      ),
+      loading: () => Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          height: 32.0,
+          width: 180.0,
+          color: Colors.grey[300],
+        ),
+      ),
+      error: (err, stackTrace) => const Icon(Icons.error),
+    );
+  }
+}
 
-            final borderColor = colors[imageUrl] ?? AppColors.borderLightColor;
-            return Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                  padding: const EdgeInsets.all(1),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: borderColor,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  height: 60,
-                  width: 60,
-                  child: ClipOval(
-                    child: CachedNetworkImage(
-                      imageUrl: data[index],
-                      placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(
-                        color: AppColors.borderLightColor,
-                      )),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+class OnlineContactsList extends StatelessWidget {
+  const OnlineContactsList({
+    super.key,
+    required this.data,
+  });
+
+  final List<ImageData> data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: List.generate(data.length, (index) {
+        final imageUrl = data[index];
+
+        return Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.all(1),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: data[index].dominantColor ?? AppColors.borderDarkColor,
+                  width: 2,
                 ),
-                Text(
-                  names[index],
-                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.secondaryLight),
-                )
-              ],
-            );
-          }));
-        },
-        loading: () => const Loader(),
-        error: (err, stackTrace) => const Icon(Icons.error));
+                borderRadius: BorderRadius.circular(50),
+              ),
+              height: 60,
+              width: 60,
+              child: ProfileImage(
+                imageUrl: imageUrl.url,
+              ),
+            ),
+            Text(
+              names[index],
+              style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                  fontWeight: FontWeight.w400, color: AppColors.secondaryLight),
+            ),
+          ],
+        );
+      }),
+    );
   }
 }

@@ -13,10 +13,6 @@ import '../../utils/db_access.dart';
 
 final authRepositoryProvider = Provider((ref) => AuthRepository());
 
-final imageUrlProvider =
-    StateNotifierProvider<ImageNotifier, AsyncValue<List<String>>>(
-        (ref) => ImageNotifier(ref));
-
 final userProvider =
     StateNotifierProvider<UserNotifier, AsyncValue<DatingUser?>>(
         (ref) => UserNotifier(ref));
@@ -29,8 +25,8 @@ class UserNotifier extends StateNotifier<AsyncValue<DatingUser?>> {
   final Ref _ref;
 
   Future<void> _init() async {
+    state = const AsyncValue.loading();
     try {
-      await loginStatus();
       if (await _isLoggedIn()) {
         await _loadUser();
       } else {
@@ -48,13 +44,8 @@ class UserNotifier extends StateNotifier<AsyncValue<DatingUser?>> {
     return isLoggedIn;
   }
 
-  Future<void> loginStatus() async {
-    final prefs = await SharedPreferences.getInstance();
-    final isLoggedIn = prefs.getBool("isLoggedIn") ?? false;
-    log('ISLOGGEDD IN: $isLoggedIn');
-  }
-
   Future<void> _loadUser() async {
+    state = const AsyncValue.loading();
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString("userID");
     final token = prefs.getString("token");
@@ -125,25 +116,5 @@ class UserNotifier extends StateNotifier<AsyncValue<DatingUser?>> {
     await prefs.remove("userEmail");
     await prefs.setBool("isLoggedIn", false);
     state = const AsyncValue.data(null);
-  }
-}
-
-class ImageNotifier extends StateNotifier<AsyncValue<List<String>>> {
-  ImageNotifier(this._ref) : super(const AsyncValue.loading()) {
-    fetchImage();
-  }
-  final Ref _ref;
-
-  Future<void> fetchImage() async {
-    state = const AsyncValue.loading();
-    try {
-      final image = await _ref.read(authRepositoryProvider).fetchImageUrl();
-
-      // log("imageUrl: $image");
-      state = AsyncValue.data(image);
-    } catch (err, stackTrace) {
-      state = AsyncValue.error(err, stackTrace);
-      rethrow;
-    }
   }
 }

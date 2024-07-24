@@ -42,6 +42,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final isLoading = ref.watch(loadingProvider);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       backgroundColor: themeMode == ThemeMode.dark
           ? AppColors.darkAddIconBorderColor

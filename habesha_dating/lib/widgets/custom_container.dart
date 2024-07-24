@@ -10,9 +10,11 @@ class CustomContainer extends ConsumerWidget {
   const CustomContainer({
     super.key,
     required this.child,
+    this.height,
   });
 
   final Widget child;
+  final double? height;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,7 +22,8 @@ class CustomContainer extends ConsumerWidget {
     final size = MediaQuery.of(context).size;
     return Container(
       width: size.width,
-      height: !GetPlatform.isMobile ? size.height : size.height * 0.7,
+      height:
+          height ?? (!GetPlatform.isMobile ? size.height : size.height * 0.7),
       padding: EdgeInsets.only(top: 16, bottom: GetPlatform.isMobile ? 0 : 16),
       decoration: BoxDecoration(
         color: theme == ThemeMode.light

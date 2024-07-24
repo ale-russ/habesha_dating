@@ -65,10 +65,7 @@ class IntroPage extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Text(
                       'Habesha Dating',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium
-                          ?.copyWith(color: Colors.white),
+                      style: Theme.of(context).textTheme.labelMedium,
                     )
                   ],
                 ),
@@ -82,8 +79,8 @@ class IntroPage extends ConsumerWidget {
                 LoginButton(
                   buttonLabel: 'Sign up with email',
                   label: 'Existing account? ',
-                  onButtonTap: () => context.go("/signup"),
-                  onTap: () => context.go("/login"),
+                  onButtonTap: () => context.push("/signup"),
+                  onTap: () => context.push("/login"),
                 ),
 
                 const Spacer(flex: 1),

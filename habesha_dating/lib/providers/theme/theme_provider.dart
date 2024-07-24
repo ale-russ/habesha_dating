@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '/helpers/theme_preference.dart';
+import '../../utils/theme_preference.dart';
 import '/utils/db_access.dart';
 import '/utils/utility_methods.dart';
 

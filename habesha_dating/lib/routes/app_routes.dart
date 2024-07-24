@@ -24,11 +24,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     // initialLocation: userState.value == null ? "/intro" : "/home",
     initialLocation: "/home",
-    redirect: (context, state) {
+    /*  redirect: (context, state) {
       userState.when(
           data: (user) {
-            log("userState in async: ${userState.value}");
-
             final isSigningUP = state.matchedLocation == "/signup";
             final isLoggingIn = state.matchedLocation == "/login";
 
@@ -45,7 +43,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           error: (_, stackTrace) => null,
           loading: () => "/loader");
       return null;
-    },
+    }, */
     routes: <RouteBase>[
       GoRoute(
         path: "/",

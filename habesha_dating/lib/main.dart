@@ -38,9 +38,9 @@ class MyApp extends ConsumerWidget {
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
       title: 'Flutter Demo',
-      theme: AppThemes.light,
-      darkTheme: AppThemes.dark,
-      themeMode: themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.dark,
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      themeMode: themeMode,
     );
   }
 }

@@ -39,7 +39,7 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
       centerTitle: centerTitle,
       leading: Builder(
         builder: (context) {
-          if (!hasLeading || kIsWeb) return const SizedBox.shrink();
+          if (!hasLeading) return const SizedBox.shrink();
           return IconButton(
             icon: leading ??
                 const Icon(

@@ -34,14 +34,11 @@ class BottomNavBar extends ConsumerWidget {
                     ? AppColors.primaryDarkColor
                     : AppColors.darkGreyDarkColor,
               ),
-              Text(
-                "Messages",
-                style: TextStyle(
-                  color: currentIndex == 0
-                      ? AppColors.primaryDarkColor
-                      : AppColors.darkGreyDarkColor,
-                ),
-              )
+              Text("Messages",
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelLarge!
+                      .copyWith(color: AppColors.darkGreyLightColor))
             ],
           ),
           label: '',
@@ -56,14 +53,11 @@ class BottomNavBar extends ConsumerWidget {
                   ? AppColors.primaryDarkColor
                   : AppColors.darkGreyDarkColor,
             ),
-            Text(
-              "Calls",
-              style: TextStyle(
-                color: currentIndex == 1
-                    ? AppColors.primaryDarkColor
-                    : AppColors.darkGreyDarkColor,
-              ),
-            ),
+            Text("Calls",
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(color: AppColors.darkGreyLightColor)),
           ]),
           label: '',
         ),
@@ -77,14 +71,11 @@ class BottomNavBar extends ConsumerWidget {
                   ? AppColors.primaryDarkColor
                   : AppColors.darkGreyDarkColor,
             ),
-            Text(
-              "Contacts",
-              style: TextStyle(
-                color: currentIndex == 2
-                    ? AppColors.primaryDarkColor
-                    : AppColors.darkGreyDarkColor,
-              ),
-            )
+            Text("Contacts",
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(color: AppColors.darkGreyLightColor))
           ]),
           label: '',
         ),
@@ -98,14 +89,11 @@ class BottomNavBar extends ConsumerWidget {
                   ? AppColors.primaryDarkColor
                   : AppColors.darkGreyDarkColor,
             ),
-            Text(
-              "Settings",
-              style: TextStyle(
-                color: currentIndex == 3
-                    ? AppColors.primaryDarkColor
-                    : AppColors.darkGreyDarkColor,
-              ),
-            )
+            Text("Settings",
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(color: AppColors.darkGreyLightColor))
           ]),
           label: '',
         ),

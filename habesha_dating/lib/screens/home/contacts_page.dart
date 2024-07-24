@@ -35,7 +35,7 @@ class ContactsPage extends ConsumerWidget {
             hasLeading: true,
             leading: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
+                  shape: BoxShape.circle,
                   border: Border.all(
                       color: theme == ThemeMode.light
                           ? AppColors.borderLightColor
@@ -81,13 +81,12 @@ class ContactsPage extends ConsumerWidget {
 
                   return StickyHeader(
                       header: Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.only(left: 16),
-                        // color: Theme.of(context).colorScheme.secondary,
-                        color: theme == ThemeMode.dark
-                            ? AppColors.darkAddIconBorderColor
-                            : AppColors.secondaryLight,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.secondary,
+                            shape: BoxShape.circle),
                         child: Text(
+                          textAlign: TextAlign.center,
                           initial,
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
@@ -101,11 +100,11 @@ class ContactsPage extends ConsumerWidget {
                               ),
                               title: Text(
                                 contact.name,
-                                style: Theme.of(context).textTheme.bodyLarge,
+                                style: Theme.of(context).textTheme.bodyMedium!,
                               ),
                               subtitle: Text(
                                 contact.status,
-                                style: Theme.of(context).textTheme.labelMedium,
+                                style: Theme.of(context).textTheme.labelSmall,
                               ),
                             );
                           },

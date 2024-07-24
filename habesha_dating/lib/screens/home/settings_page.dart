@@ -50,10 +50,10 @@ class SettingsPage extends ConsumerWidget {
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            color: theme == ThemeMode.dark
-                                ? AppColors.darkGreyDarkColor.withOpacity(0.1)
-                                : AppColors.darkGreyLightColor.withOpacity(0.1),
-                          ),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outline
+                                  .withOpacity(0.1)),
                         ),
                       ),
                       child: Row(
@@ -76,29 +76,20 @@ class SettingsPage extends ConsumerWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "James Madison",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .displayMedium!
-                                        .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                            color: theme == ThemeMode.dark
-                                                ? AppColors.headingDarkColor
-                                                : AppColors.headingLightColor),
-                                  ),
+                                  Text("James Madison",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!),
                                   Text(
                                     'Personal Motto',
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelSmall!
                                         .copyWith(
-                                          fontSize: 12,
-                                          color: theme == ThemeMode.dark
-                                              ? AppColors.darkGreyLightColor
-                                              : AppColors.darkGreyDarkColor,
-                                        ),
+                                            fontSize: 12,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiary),
                                   ),
                                 ],
                               )
@@ -263,33 +254,18 @@ class SettingsMenu extends ConsumerWidget {
                   ? AppColors.shareDarkColor
                   : AppColors.sharedLightColor,
               shape: BoxShape.circle),
-          child: Icon(icon,
-              color: theme == ThemeMode.dark
-                  ? AppColors.darkGreyDarkColor
-                  : AppColors.darkGreyLightColor),
+          child: Icon(icon, color: Theme.of(context).colorScheme.tertiary),
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.displayMedium!.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: theme == ThemeMode.dark
-                        ? AppColors.headingDarkColor
-                        : AppColors.headingLightColor,
                   ),
             ),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                    fontSize: 12,
-                    color: theme == ThemeMode.dark
-                        ? AppColors.darkGreyLightColor
-                        : AppColors.darkGreyDarkColor,
-                  ),
-            )
+            Text(label, style: Theme.of(context).textTheme.labelSmall!)
           ],
         ),
       ),
