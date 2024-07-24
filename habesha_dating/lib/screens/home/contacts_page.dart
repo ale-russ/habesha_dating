@@ -24,9 +24,8 @@ class ContactsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
-    // groupContacts();
     final groupedContacts = ref.watch(contactsProvider);
-
+    log("THEME: ${Theme.of(context).colorScheme.secondary}");
     return groupedContacts.when(
       data: (groupContacts) {
         final sortedKeys = groupContacts.keys.toList();
@@ -82,8 +81,12 @@ class ContactsPage extends ConsumerWidget {
 
                   return StickyHeader(
                       header: Container(
+                        width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.only(left: 16),
-                        color: Theme.of(context).colorScheme.secondary,
+                        // color: Theme.of(context).colorScheme.secondary,
+                        color: theme == ThemeMode.dark
+                            ? AppColors.darkAddIconBorderColor
+                            : AppColors.secondaryLight,
                         child: Text(
                           initial,
                           style: Theme.of(context).textTheme.bodyLarge,
