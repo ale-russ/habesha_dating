@@ -187,7 +187,7 @@ class AccountIconsTile extends ConsumerWidget {
             ),
             const SizedBox(height: 28),
             GestureDetector(
-              onTap: ref.read(authController.notifier).logout,
+              onTap: ref.read(authProvider.notifier).logout,
               child: ListTile(
                 dense: true,
                 horizontalTitleGap: 30,

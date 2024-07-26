@@ -47,7 +47,7 @@ class ContactsPage extends ConsumerWidget {
                   color: AppColors.secondaryLight,
                 ),
                 onPressed: () {
-                  ref.read(authController.notifier).logout();
+                  ref.read(authProvider.notifier).logout();
                   context.pushReplacement("/intro");
                 },
               ),

@@ -14,41 +14,129 @@ import '../../utils/db_access.dart';
 
 final authRepositoryProvider = Provider((ref) => AuthRepository());
 
-final authController = AsyncNotifierProvider<AuthController, DatingUser?>(() {
-  return AuthController();
-});
+// final authController = AsyncNotifierProvider<AuthController, DatingUser?>(() {
+//   return AuthController();
+// });
 
-class AuthController extends AsyncNotifier<DatingUser?> {
+// class AuthController extends AsyncNotifier<DatingUser?> {
+//   @override
+//   FutureOr<DatingUser?> build() async {
+//     return await _init();
+//   }
+
+//   DatingUser? _user;
+
+//   Future<void> login(String email, String password) async {
+//     try {
+//       final authRepository = ref.read(authRepositoryProvider);
+//       state = const AsyncLoading();
+//       log("State in login: $state");
+//       _user = await authRepository.login(email, password);
+//       state = AsyncValue.data(_user);
+//       await _saveUser(_user!);
+//     } catch (err, stackTrace) {
+//       state = AsyncValue.error(err, stackTrace);
+//       rethrow;
+//     }
+//   }
+
+//   Future<DatingUser?> _init() async {
+//     try {
+//       if (await _isLoggedIn()) {
+//         return await _loadUser();
+//       }
+//       return null;
+//     } catch (err, stackTrace) {
+//       state = AsyncValue.error(err, stackTrace);
+//       return null;
+//     }
+//   }
+
+//   Future<bool> _isLoggedIn() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     final isLoggedIn = prefs.getBool("isLoggedIn") ?? false;
+//     log('isLoggedIn in provider: $isLoggedIn');
+//     return isLoggedIn;
+//   }
+
+//   Future<DatingUser?> _loadUser() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     final userId = prefs.getString("userID");
+//     final token = prefs.getString("token");
+//     final userEmail = prefs.getString("userEmail");
+
+//     if (userId != null && token != null && userEmail != null) {
+//       return DatingUser(
+//         msg: "",
+//         userId: userId,
+//         token: token,
+//         userEmail: userEmail,
+//       );
+//     }
+//     return null;
+//   }
+
+//   Future<void> register(
+//       String email, String password, String username, Uint8List? file) async {
+//     state = const AsyncValue.loading();
+//     try {
+//       final authRepository = ref.read(authRepositoryProvider);
+//       _user = await authRepository.register(email, password, username, file);
+//       state = AsyncValue.data(_user);
+//       await DbAccess.userDB.putAll({
+//         "email": email,
+//         "user_password": password,
+//       });
+//       await _saveUser(_user!);
+//     } catch (err, stackTrace) {
+//       state = AsyncValue.error(err, stackTrace);
+//       rethrow;
+//     }
+//   }
+
+//   Future<void> _saveUser(DatingUser user) async {
+//     await DbAccess.userDB.putAll({
+//       "token": user.token,
+//       "userId": user.userId!,
+//       "isLoggedIn": true,
+//     });
+
+//     final themeMode = ref.read(themeProvider);
+//     await DbAccess.userDB.put("isDarkMode", themeMode == ThemeMode.dark);
+//   }
+
+//   Future<void> logout() async {
+//     final prefs = await SharedPreferences.getInstance();
+//     await prefs.remove("userID");
+//     await prefs.remove("token");
+//     await prefs.remove("userEmail");
+//     await prefs.setBool("isLoggedIn", false);
+//     state = const AsyncValue.data(null);
+//   }
+// }
+
+final authProvider =
+    AsyncNotifierProvider<AuthNotifier, bool>(() => AuthNotifier());
+
+class AuthNotifier extends AsyncNotifier<bool> {
   @override
-  FutureOr<DatingUser?> build() async {
-    return await _init();
+  FutureOr<bool> build() {
+    // return false;
+    return _init() ?? false;
   }
 
-  DatingUser? _user;
+  String? msg;
 
-  Future<void> login(String email, String password) async {
-    try {
-      final authRepository = ref.read(authRepositoryProvider);
-      state = const AsyncLoading();
-      log("State in login: $state");
-      _user = await authRepository.login(email, password);
-      state = AsyncValue.data(_user);
-      await _saveUser(_user!);
-    } catch (err, stackTrace) {
-      state = AsyncValue.error(err, stackTrace);
-      rethrow;
-    }
-  }
-
-  Future<DatingUser?> _init() async {
+  Future<bool> _init() async {
     try {
       if (await _isLoggedIn()) {
-        return await _loadUser();
+        await _loadUser();
+        return true;
       }
-      return null;
+      return false;
     } catch (err, stackTrace) {
       state = AsyncValue.error(err, stackTrace);
-      return null;
+      return false;
     }
   }
 
@@ -76,18 +164,38 @@ class AuthController extends AsyncNotifier<DatingUser?> {
     return null;
   }
 
+  Future<bool> login(String email, String password) async {
+    const AsyncValue.loading();
+    try {
+      final response =
+          await ref.read(authRepositoryProvider).signIn(email, password);
+      if (response.token != null) {
+        state = const AsyncValue.data(true);
+      } else {
+        state = const AsyncValue.data(false);
+      }
+      msg = response.msg!;
+      log("MSG: $msg");
+    } on Exception catch (err) {
+      msg = err.toString();
+    }
+
+    return state.value!;
+  }
+
   Future<void> register(
       String email, String password, String username, Uint8List? file) async {
     state = const AsyncValue.loading();
     try {
       final authRepository = ref.read(authRepositoryProvider);
-      _user = await authRepository.register(email, password, username, file);
-      state = AsyncValue.data(_user);
+      final _user =
+          await authRepository.register(email, password, username, file);
+      state = const AsyncValue.data(true);
       await DbAccess.userDB.putAll({
         "email": email,
         "user_password": password,
       });
-      await _saveUser(_user!);
+      await _saveUser(_user);
     } catch (err, stackTrace) {
       state = AsyncValue.error(err, stackTrace);
       rethrow;
@@ -111,6 +219,6 @@ class AuthController extends AsyncNotifier<DatingUser?> {
     await prefs.remove("token");
     await prefs.remove("userEmail");
     await prefs.setBool("isLoggedIn", false);
-    state = const AsyncValue.data(null);
+    state = const AsyncValue.data(false);
   }
 }

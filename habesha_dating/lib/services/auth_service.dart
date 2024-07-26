@@ -29,15 +29,8 @@ class AuthService {
 
         return user;
       } else {
-        // log("RESPONSE: ${datingUserFromJson(response.body)}");
-        throw jsonDecode(response.body)['msg'];
+        return datingUserFromJson(response.body);
       }
-      // final errorData = jsonDecode(response.body);
-      // if (errorData.containsKey('msg')) {
-      //   throw errorData['msg'];
-      // } else {
-      //   throw 'An unknown error occurred';
-      // }
     } on Exception catch (err) {
       log("Error: $err");
       rethrow;

@@ -18,103 +18,124 @@ import '/screens/intro_page.dart';
 import '/widgets/logo.dart';
 import "/screens/home/home.dart";
 
-final goRouterProvider = Provider<GoRouter>((ref) {
-  final userState = ref.watch(authController);
-  log("USERSTATE: ${userState.value}");
-  return GoRouter(
-    initialLocation: userState.value == null ? "/intro" : "/home",
-    // initialLocation: "/home",
-    redirect: (context, state) {
-      userState.when(
-          data: (user) {
-            final isSigningUP = state.matchedLocation == "/signup";
-            final isLoggingIn = state.matchedLocation == "/login";
-            log('isLoggingIn, $isLoggingIn');
+final goRouterProvider = Provider<GoRouter>(
+  (ref) {
+    final userState = ref.watch(authProvider);
+    log("USERSTATE.VALUE: ${userState.value}");
+    return GoRouter(
+      initialLocation: userState.value! ? "/home" : "/intro",
+      // initialLocation: "/home",
+      redirect: (context, state) {
+        log('isLoggingIn, ${state.uri}');
+        final isSigningUP = state.matchedLocation == "/signup";
+        final isLoggingIn = state.matchedLocation == "/login";
 
-            if (user != null) {
-              return "/home";
-            } else if (isLoggingIn) {
-              return "/login";
-            } else if (isSigningUP) {
-              return "/signup";
-            } else {
-              return "/intro";
-            }
+        log('isLoggingIn, $isLoggingIn');
+
+        if (userState.value!) {
+          return "/home";
+        } else if (isLoggingIn || isSigningUP) {
+          // return "/login";
+          return null;
+        }
+        //  else if (isSigningUP) {
+        //   return "/signup";
+        // }
+        else {
+          return "/intro";
+        }
+
+        // userState.when(
+        //     data: (user) {
+        //       log("USER: $user");
+
+        //       log('isLoggingIn, $isLoggingIn');
+
+        //       if (user) {
+        //         return "/home";
+        //       } else if (isLoggingIn) {
+        //         return "/login";
+        //       } else if (isSigningUP) {
+        //         return "/signup";
+        //       } else {
+        //         return "/intro";
+        //       }
+        //     },
+        //     error: (_, stackTrace) => null,
+        //     loading: () => "/loader");
+        // return null;
+      },
+      routes: <RouteBase>[
+        GoRoute(
+          path: "/",
+          builder: (BuildContext context, GoRouterState state) => const Logo(),
+        ),
+        GoRoute(
+          path: "/loader",
+          builder: (context, state) => const Loader(),
+        ),
+        GoRoute(
+          path: "/intro",
+          builder: (BuildContext context, GoRouterState state) =>
+              const IntroPage(),
+        ),
+        GoRoute(
+          path: "/signup",
+          builder: (BuildContext context, GoRouterState state) {
+            return const SignupPage();
           },
-          error: (_, stackTrace) => null,
-          loading: () => "/loader");
-      return null;
-    },
-    routes: <RouteBase>[
-      GoRoute(
-        path: "/",
-        builder: (BuildContext context, GoRouterState state) => const Logo(),
-      ),
-      GoRoute(
-        path: "/loader",
-        builder: (context, state) => const Loader(),
-      ),
-      GoRoute(
-        path: "/intro",
-        builder: (BuildContext context, GoRouterState state) =>
-            const IntroPage(),
-      ),
-      GoRoute(
-        path: "/signup",
-        builder: (BuildContext context, GoRouterState state) {
-          return const SignupPage();
-        },
-      ),
-      GoRoute(
-        path: "/login",
-        builder: (BuildContext context, GoRouterState state) {
-          return const LoginPage();
-        },
-      ),
-      GoRoute(
-          path: "/home",
-          builder: (BuildContext context, GoRouterState state) => HomePage(),
-          routes: [
-            GoRoute(
-                path: "messages",
-                builder: (BuildContext context, GoRouterState state) =>
-                    const MessagesPage(),
-                routes: [
-                  GoRoute(
-                      path: "chat",
-                      name: "/chat",
-                      builder: (BuildContext context, GoRouterState state) {
-                        final isOnline = state.uri.queryParameters["isOline"];
-                        final name = state.uri.queryParameters["name"];
-                        final avatar = state.uri.queryParameters["avatar"];
+        ),
+        GoRoute(
+          path: "/login",
+          builder: (BuildContext context, GoRouterState state) {
+            return const LoginPage();
+          },
+        ),
+        GoRoute(
+            path: "/home",
+            builder: (BuildContext context, GoRouterState state) => HomePage(),
+            routes: [
+              GoRoute(
+                  path: "messages",
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const MessagesPage(),
+                  routes: [
+                    GoRoute(
+                        path: "chat",
+                        name: "/chat",
+                        builder: (BuildContext context, GoRouterState state) {
+                          final isOnline = state.uri.queryParameters["isOline"];
+                          final name = state.uri.queryParameters["name"];
+                          final avatar = state.uri.queryParameters["avatar"];
 
-                        return ChatDetailsPage(
-                          isOnline: bool.tryParse(isOnline!)!,
-                          name: name!,
-                          avatar: avatar!,
-                        );
-                      })
-                ]),
-            GoRoute(
-                path: "call",
-                builder: (BuildContext context, GoRouterState state) =>
-                    const CallPage()),
-            /* GoRoute(
+                          return ChatDetailsPage(
+                            isOnline: bool.tryParse(isOnline!)!,
+                            name: name!,
+                            avatar: avatar!,
+                          );
+                        })
+                  ]),
+              GoRoute(
+                  path: "call",
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const CallPage()),
+              /* GoRoute(
                 path: "contacts",
                 builder: (BuildContext context, GoRouterState state) 
                     {return ContactsPage(contacts: state.extra['contacts'],)}), */
-            GoRoute(
-                path: "settings",
-                builder: (BuildContext context, GoRouterState state) =>
-                    const SettingsPage(),
-                routes: [
-                  GoRoute(
-                    path: "account",
-                    builder: (BuildContext context, GoRouterState state) =>
-                        AccountPage(),
-                  ),
-                ]),
-          ])
-    ],
-  );
-});
+              GoRoute(
+                  path: "settings",
+                  builder: (BuildContext context, GoRouterState state) =>
+                      const SettingsPage(),
+                  routes: [
+                    GoRoute(
+                      path: "account",
+                      builder: (BuildContext context, GoRouterState state) =>
+                          AccountPage(),
+                    ),
+                  ]),
+            ])
+      ],
+    );
+  },
+);
