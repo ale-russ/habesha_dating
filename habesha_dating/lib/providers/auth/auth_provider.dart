@@ -30,6 +30,7 @@ class AuthController extends AsyncNotifier<DatingUser?> {
     try {
       final authRepository = ref.read(authRepositoryProvider);
       state = const AsyncLoading();
+      log("State in login: $state");
       _user = await authRepository.login(email, password);
       state = AsyncValue.data(_user);
       await _saveUser(_user!);

@@ -45,8 +45,8 @@ const upload = multer({ storage });
 
 const client = new MongoClient(mongoUrl);
 
-const db = client.db("test");
-const userCollection = db.collection("dating_user");
+const db = client.db("habesha_dating");
+const userCollection = db.collection("user");
 
 // Check if email exists in the db
 async function checkEmailStatus(userCollection, email) {
