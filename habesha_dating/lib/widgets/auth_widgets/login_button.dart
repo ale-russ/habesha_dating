@@ -1,11 +1,16 @@
 // import 'dart:developer';
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../providers/auth/form_validation_provider.dart';
+import '../../providers/loading_provider.dart';
 import '../../providers/theme/theme_provider.dart';
 import '../../themes/app_colors.dart';
+import '../common/loader.dart';
 
 class LoginButton extends ConsumerWidget {
   const LoginButton({
@@ -16,7 +21,6 @@ class LoginButton extends ConsumerWidget {
     required this.buttonLabel,
     this.height = 60,
     this.isLogin = false,
-    this.forgetPassword = false,
     this.color = AppColors.secondaryLight,
     this.validate = false,
   });
@@ -25,7 +29,7 @@ class LoginButton extends ConsumerWidget {
   final String label;
   final double height;
   final bool isLogin;
-  final bool forgetPassword;
+
   final Color color;
   final void Function() onButtonTap;
   final void Function()? onTap;
@@ -33,10 +37,13 @@ class LoginButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = ref.watch(loadingProvider);
     final themeMode = ref.watch(themeProvider);
     final isFormValid = isLogin
         ? ref.watch(isLoginFormValidProvider)
         : ref.watch(isFormValidProvider);
+
+    log("IS FORM VALID: $isFormValid");
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -60,51 +67,52 @@ class LoginButton extends ConsumerWidget {
               backgroundColor: color,
               padding: const EdgeInsets.symmetric(vertical: 20),
             ),
-            child: Text(
-              buttonLabel,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    fontSize: 16,
-                    color: validate
-                        ? !isFormValid
-                            ? AppColors.darkGreyDarkColor
-                            : AppColors.secondaryLight
-                        : AppColors.secondaryDark,
+            child: isLoading
+                ? const Loader()
+                : Text(
+                    buttonLabel,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          fontSize: 16,
+                          color: validate
+                              ? !isFormValid
+                                  ? AppColors.darkGreyDarkColor
+                                  : AppColors.secondaryLight
+                              : AppColors.secondaryDark,
+                        ),
                   ),
-            ),
           ),
           SizedBox(height: height),
-          if (!isLogin)
-            Center(
-              child: TextButton(
-                onPressed: onTap ?? () {},
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      label,
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: forgetPassword
-                              ? AppColors.primaryDarkColor
-                              : AppColors.lightDarkGreyColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    if (!forgetPassword)
+          Center(
+            child: Column(
+              children: [
+                TextButton(
+                  onPressed: onTap ?? () {},
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
                       Text(
-                        "Log in",
-                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                              color: !forgetPassword
-                                  ? Colors.white
-                                  : themeMode == ThemeMode.light
-                                      ? Colors.white
-                                      : Colors.black,
-                            ),
+                        label,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: AppColors.primaryDarkColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
                       ),
-                  ],
+                      Text("Log in",
+                          style: Theme.of(context).textTheme.labelLarge!),
+                    ],
+                  ),
                 ),
-              ),
+                if (isLogin)
+                  TextButton(
+                      onPressed: () => context.push("/signup"),
+                      child: Text(
+                        "Register",
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ))
+              ],
             ),
+          ),
         ],
       ),
     );

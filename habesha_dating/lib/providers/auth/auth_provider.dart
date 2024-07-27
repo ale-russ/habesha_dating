@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habesha_dating/providers/auth/form_validation_provider.dart';
 import 'package:habesha_dating/providers/theme/theme_provider.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +20,7 @@ final authProvider =
 
 class AuthNotifier extends AsyncNotifier<bool> {
   bool loginFailed = false;
+  bool signUpFailed = false;
   @override
   FutureOr<bool> build() async {
     return isAuthenticated ?? false;
@@ -69,7 +71,7 @@ class AuthNotifier extends AsyncNotifier<bool> {
     const AsyncValue.loading();
     try {
       final response =
-          await ref.read(authRepositoryProvider).signIn(email, password);
+          await ref.read(authRepositoryProvider).login(email, password);
       if (response.token != null) {
         state = const AsyncValue.data(true);
       } else {
@@ -77,33 +79,38 @@ class AuthNotifier extends AsyncNotifier<bool> {
         loginFailed = true;
       }
       msg = response.msg!;
-      log("MSG: $msg");
-    } on Exception catch (err, stackTrace) {
+    } catch (err, stackTrace) {
       state = AsyncValue.error(err, stackTrace);
       loginFailed = true;
-      msg = err.toString();
+      rethrow;
     }
+    log("MSG: $msg");
 
     return state.value!;
   }
 
-  Future<void> register(
+  Future<bool> register(
       String email, String password, String username, Uint8List? file) async {
-    state = const AsyncValue.loading();
+    const AsyncValue.loading();
     try {
-      final authRepository = ref.read(authRepositoryProvider);
-      final _user =
-          await authRepository.register(email, password, username, file);
-      state = const AsyncValue.data(true);
-      await DbAccess.userDB.putAll({
-        "email": email,
-        "user_password": password,
-      });
-      await _saveUser(_user);
+      final response = await ref
+          .read(authRepositoryProvider)
+          .register(email, password, username, file);
+      if (response.userId != null) {
+        state = const AsyncValue.data(true);
+      } else {
+        state = const AsyncValue.data(false);
+        signUpFailed = true;
+      }
+      msg = response.msg!;
     } catch (err, stackTrace) {
       state = AsyncValue.error(err, stackTrace);
+      signUpFailed = true;
       rethrow;
     }
+    log("MSG: $msg");
+
+    return state.value!;
   }
 
   Future<void> _saveUser(DatingUser user) async {

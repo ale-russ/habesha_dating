@@ -168,7 +168,7 @@ class SignupPageState extends ConsumerState<SignupPage> {
               const SizedBox(height: kIsWeb ? 30 : 8),
               LoginButton(
                 buttonLabel: 'Create an account',
-                label: "Already have an account? Login ",
+                label: "Already registered? ",
                 onButtonTap: () async {
                   final ctx = ScaffoldMessenger.of(context);
                   if (_formKey.currentState!.validate()) {
@@ -184,10 +184,11 @@ class SignupPageState extends ConsumerState<SignupPage> {
                             passwordController!.text,
                             nameController!.text,
                             _imageBytes)
-                        .then((_) => context.go("/login"));
+                        .then((_) => context.push("/login"));
                     ctx.showSnackBar(const SnackBar(
                       backgroundColor: AppColors.primaryDarkColor,
-                      content: Text("User Successfully Registered"),
+                      content: Text(
+                          "User Successfully Registered. Please Login with your credentials"),
                     ));
                   } catch (err) {
                     ctx.showSnackBar(SnackBar(
@@ -195,13 +196,15 @@ class SignupPageState extends ConsumerState<SignupPage> {
                       content: Text(err.toString()),
                     ));
                   } finally {
+                    ref.invalidate(userNameProvider);
+                    ref.invalidate(emailProvider);
+                    ref.invalidate(passwordProvider);
+                    ref.invalidate(confirmPasswordProvider);
+                    ref.invalidate(profileImageProvider);
                     ref.read(loadingProvider.notifier).state = false;
                   }
                 },
-                onTap: () {
-                  context.go("/login");
-                },
-                forgetPassword: true,
+                onTap: () => context.push("/login"),
                 color: AppColors.primaryLightColor,
                 validate: true,
                 isLogin: false,

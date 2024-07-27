@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:habesha_dating/widgets/common/toggle_button.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -23,7 +24,17 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           ? AppColors.darkAddIconBorderColor
           : AppColors.secondaryLight,
       automaticallyImplyLeading: !kIsWeb ? true : false,
-      // leading: Icon(Icons.arrow_back),
+      leading: Builder(
+        builder: (context) {
+          return IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: AppColors.secondaryLight,
+            ),
+            onPressed: context.pop,
+          );
+        },
+      ),
       actions: const [ThemeToggleButton()],
     );
   }

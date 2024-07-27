@@ -11,10 +11,6 @@ class AuthRepository {
     return await _authService.login(email, password);
   }
 
-  Future<DatingUser> signIn(String email, String password) async {
-    return await _authService.login(email, password);
-  }
-
   Future<DatingUser> register(
       String email, String password, String name, Uint8List? imageFile) async {
     return await _authService.register(email, password, name, imageFile);

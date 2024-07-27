@@ -27,12 +27,9 @@ final goRouterProvider = Provider<GoRouter>(
     return GoRouter(
       initialLocation: userState ? "/home" : "/intro",
       redirect: (context, state) {
-        log('isLoggingIn, ${state.uri}');
         final isSigningUP = state.matchedLocation == "/signup";
         final isLoggingIn = state.matchedLocation == "/login";
-
-        log('isLoggingIn, $isLoggingIn');
-        log("loginFailure: ${loginFailedNotifier.loginFailed}");
+        log("signup fail: ${loginFailedNotifier.signUpFailed}");
 
         if (userState) {
           return "/home";
@@ -41,6 +38,9 @@ final goRouterProvider = Provider<GoRouter>(
           return "/login";
         } else if (isLoggingIn) {
           return null;
+        } else if (loginFailedNotifier.signUpFailed) {
+          loginFailedNotifier.loginFailed = false;
+          return "/signup";
         } else if (isSigningUP) {
           return "/signup";
         } else {

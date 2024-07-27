@@ -10,7 +10,8 @@ class Loader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(
       child: CircularProgressIndicator(
-        color: AppColors.primaryDarkColor,
+        color: AppColors.secondaryLight,
+        strokeWidth: 1,
       ),
     );
   }
