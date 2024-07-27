@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '/providers/loading_provider.dart';
 import '../../widgets/common/loader.dart';
@@ -88,11 +87,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               emailController!.text,
                               passwordController!.text,
                             );
-                        // if (mounted) {
-                        //   context.pushReplacement("/home");
-                        // }
                       } catch (err) {
                         log("MESSAGE: ${ref.watch(authProvider.notifier).msg}");
+
                         ctx.showSnackBar(SnackBar(
                           backgroundColor: AppColors.darkErrorColor,
                           content: Text(

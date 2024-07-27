@@ -20,50 +20,32 @@ import "/screens/home/home.dart";
 
 final goRouterProvider = Provider<GoRouter>(
   (ref) {
-    final userState = ref.watch(authProvider);
-    log("USERSTATE.VALUE: ${userState.value}");
+    final authState = ref.watch(authProvider);
+    final loginFailedNotifier = ref.watch(authProvider.notifier);
+    bool? userState = authState.value ?? false;
+
     return GoRouter(
-      initialLocation: userState.value! ? "/home" : "/intro",
-      // initialLocation: "/home",
+      initialLocation: userState ? "/home" : "/intro",
       redirect: (context, state) {
         log('isLoggingIn, ${state.uri}');
         final isSigningUP = state.matchedLocation == "/signup";
         final isLoggingIn = state.matchedLocation == "/login";
 
         log('isLoggingIn, $isLoggingIn');
+        log("loginFailure: ${loginFailedNotifier.loginFailed}");
 
-        if (userState.value!) {
+        if (userState) {
           return "/home";
-        } else if (isLoggingIn || isSigningUP) {
-          // return "/login";
+        } else if (loginFailedNotifier.loginFailed) {
+          loginFailedNotifier.loginFailed = false;
+          return "/login";
+        } else if (isLoggingIn) {
           return null;
-        }
-        //  else if (isSigningUP) {
-        //   return "/signup";
-        // }
-        else {
+        } else if (isSigningUP) {
+          return "/signup";
+        } else {
           return "/intro";
         }
-
-        // userState.when(
-        //     data: (user) {
-        //       log("USER: $user");
-
-        //       log('isLoggingIn, $isLoggingIn');
-
-        //       if (user) {
-        //         return "/home";
-        //       } else if (isLoggingIn) {
-        //         return "/login";
-        //       } else if (isSigningUP) {
-        //         return "/signup";
-        //       } else {
-        //         return "/intro";
-        //       }
-        //     },
-        //     error: (_, stackTrace) => null,
-        //     loading: () => "/loader");
-        // return null;
       },
       routes: <RouteBase>[
         GoRoute(
