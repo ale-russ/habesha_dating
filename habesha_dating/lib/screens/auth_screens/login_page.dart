@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:habesha_dating/screens/auth_screens/forget_password.dart';
 
 import '/providers/loading_provider.dart';
 import '/providers/auth/auth_provider.dart';
@@ -100,7 +102,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ref.read(loadingProvider.notifier).state = false;
                 }
               },
-              onTap: () {},
+              onTap: () => context.push("/forget-password"),
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgetPasswordPage())),
               color: AppColors.primaryLightColor,
               validate: true,
               isLogin: true,

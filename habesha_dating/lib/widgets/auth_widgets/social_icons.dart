@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:habesha_dating/themes/app_colors.dart';
 
+import '../../providers/auth/auth_provider.dart';
 import '../../providers/theme/theme_provider.dart';
 
 class SocialIcons extends ConsumerWidget {
@@ -15,7 +17,9 @@ class SocialIcons extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SocialButtons(
-          onTap: () {},
+          onTap: () {
+            ref.watch(authProvider.notifier).fbLogIn();
+          },
           child: const Icon(
             Icons.facebook,
             color: Colors.blue,
@@ -31,16 +35,17 @@ class SocialIcons extends ConsumerWidget {
           ),
         ),
         const SizedBox(width: 10),
-        SocialButtons(
-          onTap: () {},
-          child: Icon(
-            Icons.apple,
-            size: 30,
-            color: themeMode == ThemeMode.light
-                ? AppColors.secondaryDark
-                : AppColors.secondaryLight,
-          ),
-        )
+        if (GetPlatform.isIOS)
+          SocialButtons(
+            onTap: () {},
+            child: Icon(
+              Icons.apple,
+              size: 30,
+              color: themeMode == ThemeMode.light
+                  ? AppColors.secondaryDark
+                  : AppColors.secondaryLight,
+            ),
+          )
       ],
     );
   }

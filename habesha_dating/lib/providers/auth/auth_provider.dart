@@ -1,8 +1,12 @@
+// ignore_for_file: unused_field
+
 import 'dart:async';
 import 'dart:developer';
 import 'dart:typed_data';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habesha_dating/providers/auth/form_validation_provider.dart';
 import 'package:habesha_dating/providers/theme/theme_provider.dart';
@@ -19,12 +23,17 @@ final authProvider =
     AsyncNotifierProvider<AuthNotifier, bool>(() => AuthNotifier());
 
 class AuthNotifier extends AsyncNotifier<bool> {
-  bool loginFailed = false;
-  bool signUpFailed = false;
   @override
   FutureOr<bool> build() async {
+    _checkIfFbLoggedIn();
     return isAuthenticated ?? false;
   }
+
+  bool loginFailed = false;
+  bool signUpFailed = false;
+  bool _checkingFB = false;
+  AccessToken? _accessToken;
+  Map<String, dynamic>? _fbUserData;
 
   String? msg;
 
@@ -122,6 +131,36 @@ class AuthNotifier extends AsyncNotifier<bool> {
 
     final themeMode = ref.read(themeProvider);
     await DbAccess.userDB.put("isDarkMode", themeMode == ThemeMode.dark);
+  }
+
+  Future<bool> _checkIfFbLoggedIn() async {
+    final accessToken = await FacebookAuth.instance.accessToken;
+    log("ACCESS TOKEN: ${accessToken!.userId}");
+    if (accessToken == null) {
+      _checkingFB = false;
+      return _checkingFB;
+    } else {
+      // final userData = await FacebookAuth.instance.getUserData(fields: "email,birthday,friends,gender,link");
+      _fbUserData = await FacebookAuth.instance.getUserData();
+      final name = (_fbUserData!['name'])!;
+      log("name: $name");
+      _accessToken = accessToken;
+      return true;
+    }
+  }
+
+  Future<void> fbLogIn() async {
+    final _isLoggedIn = await _checkIfFbLoggedIn();
+    log("facebook result: $_isLoggedIn");
+    if (!_isLoggedIn) {
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      if (loginResult.status == LoginStatus.success) {
+        final accessToken = loginResult.accessToken;
+        final user = await FacebookAuth.instance.getUserData();
+        log("AccessToken: ${accessToken!.userId}");
+      }
+    }
   }
 
   Future<void> logout() async {

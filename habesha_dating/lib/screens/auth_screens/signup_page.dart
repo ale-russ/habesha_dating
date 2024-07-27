@@ -65,14 +65,6 @@ class SignupPageState extends ConsumerState<SignupPage> {
       }
       setState(() {});
 
-      //   final pickedImageGallery = await pickImage();
-      //   if (pickedImageGallery != null) {
-      //     final bytes = await pickedImageGallery.readAsBytes();
-      //     setState(() {
-      //       _imageBytes = bytes;
-      //     });
-      //   }
-      // }
       ref.read(profileImageProvider.notifier).state = _imageBytes;
     }
   }
@@ -80,7 +72,6 @@ class SignupPageState extends ConsumerState<SignupPage> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeProvider);
-    final isLoading = ref.watch(loadingProvider);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -88,11 +79,7 @@ class SignupPageState extends ConsumerState<SignupPage> {
           ? AppColors.darkAddIconBorderColor
           : AppColors.secondaryLight,
       appBar: const CustomAppBar(),
-      body:
-          //  isLoading
-          //     ? const Loader()
-          //     :
-          Form(
+      body: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: Column(

@@ -43,8 +43,6 @@ class LoginButton extends ConsumerWidget {
         ? ref.watch(isLoginFormValidProvider)
         : ref.watch(isFormValidProvider);
 
-    log("IS FORM VALID: $isFormValid");
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
@@ -94,11 +92,11 @@ class LoginButton extends ConsumerWidget {
                       Text(
                         label,
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            color: AppColors.primaryDarkColor,
+                            color: AppColors.primaryLightColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w400),
                       ),
-                      Text("Log in",
+                      Text(isLogin ? "" : "Log in",
                           style: Theme.of(context).textTheme.labelLarge!),
                     ],
                   ),

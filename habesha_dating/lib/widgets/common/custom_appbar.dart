@@ -27,9 +27,11 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
       leading: Builder(
         builder: (context) {
           return IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back,
-              color: AppColors.secondaryLight,
+              color: themeMode == ThemeMode.dark
+                  ? AppColors.secondaryLight
+                  : AppColors.secondaryDark,
             ),
             onPressed: context.pop,
           );

@@ -1,12 +1,12 @@
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:habesha_dating/screens/settings/account_page.dart';
 
+import '../screens/auth_screens/forget_password.dart';
 import '../screens/home/chat_details.dart';
-import '/widgets/common/loader.dart';
 import '/screens/home/call_page.dart';
 import '/screens/home/contacts_page.dart';
 import '/screens/home/messages_page.dart';
@@ -29,7 +29,6 @@ final goRouterProvider = Provider<GoRouter>(
       redirect: (context, state) {
         final isSigningUP = state.matchedLocation == "/signup";
         final isLoggingIn = state.matchedLocation == "/login";
-        log("signup fail: ${loginFailedNotifier.signUpFailed}");
 
         if (userState) {
           return "/home";
@@ -50,42 +49,33 @@ final goRouterProvider = Provider<GoRouter>(
       routes: <RouteBase>[
         GoRoute(
           path: "/",
-          builder: (BuildContext context, GoRouterState state) => const Logo(),
-        ),
-        GoRoute(
-          path: "/loader",
-          builder: (context, state) => const Loader(),
+          builder: (context, state) => const Logo(),
         ),
         GoRoute(
           path: "/intro",
-          builder: (BuildContext context, GoRouterState state) =>
-              const IntroPage(),
+          builder: (context, state) => const IntroPage(),
         ),
         GoRoute(
           path: "/signup",
-          builder: (BuildContext context, GoRouterState state) {
-            return const SignupPage();
-          },
+          builder: (context, state) => const SignupPage(),
         ),
+        GoRoute(path: "/login", builder: (context, state) => const LoginPage()),
         GoRoute(
-          path: "/login",
-          builder: (BuildContext context, GoRouterState state) {
-            return const LoginPage();
-          },
+          path: "/forget-password",
+          builder: (context, state) => const ForgetPasswordPage(),
         ),
         GoRoute(
             path: "/home",
-            builder: (BuildContext context, GoRouterState state) => HomePage(),
+            builder: (context, state) => HomePage(),
             routes: [
               GoRoute(
                   path: "messages",
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const MessagesPage(),
+                  builder: (context, state) => const MessagesPage(),
                   routes: [
                     GoRoute(
                         path: "chat",
                         name: "/chat",
-                        builder: (BuildContext context, GoRouterState state) {
+                        builder: (context, state) {
                           final isOnline = state.uri.queryParameters["isOline"];
                           final name = state.uri.queryParameters["name"];
                           final avatar = state.uri.queryParameters["avatar"];
@@ -98,22 +88,18 @@ final goRouterProvider = Provider<GoRouter>(
                         })
                   ]),
               GoRoute(
-                  path: "call",
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const CallPage()),
+                  path: "call", builder: (context, state) => const CallPage()),
               /* GoRoute(
                 path: "contacts",
-                builder: (BuildContext context, GoRouterState state) 
+                builder: ( context,  state) 
                     {return ContactsPage(contacts: state.extra['contacts'],)}), */
               GoRoute(
                   path: "settings",
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const SettingsPage(),
+                  builder: (context, state) => const SettingsPage(),
                   routes: [
                     GoRoute(
                       path: "account",
-                      builder: (BuildContext context, GoRouterState state) =>
-                          AccountPage(),
+                      builder: (context, state) => AccountPage(),
                     ),
                   ]),
             ])
