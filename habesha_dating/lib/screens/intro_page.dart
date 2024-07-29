@@ -79,8 +79,8 @@ class IntroPage extends ConsumerWidget {
                 LoginButton(
                   buttonLabel: 'Sign up with email',
                   label: 'Already registered? ',
-                  onButtonTap: () => context.push("/signup"),
-                  onTap: () => context.push("/login"),
+                  onButtonTap: () => context.go("/signup"),
+                  onTap: () => context.go("/login"),
                 ),
 
                 const Spacer(flex: 1),

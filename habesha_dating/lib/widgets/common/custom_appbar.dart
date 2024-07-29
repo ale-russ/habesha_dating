@@ -24,19 +24,21 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           ? AppColors.darkAddIconBorderColor
           : AppColors.secondaryLight,
       automaticallyImplyLeading: !kIsWeb ? true : false,
-      leading: Builder(
-        builder: (context) {
-          return IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: themeMode == ThemeMode.dark
-                  ? AppColors.secondaryLight
-                  : AppColors.secondaryDark,
+      leading: kIsWeb
+          ? const SizedBox.shrink()
+          : Builder(
+              builder: (context) {
+                return IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: themeMode == ThemeMode.dark
+                        ? AppColors.secondaryLight
+                        : AppColors.secondaryDark,
+                  ),
+                  onPressed: context.pop,
+                );
+              },
             ),
-            onPressed: context.pop,
-          );
-        },
-      ),
       actions: const [ThemeToggleButton()],
     );
   }

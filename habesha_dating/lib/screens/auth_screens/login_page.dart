@@ -102,8 +102,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ref.read(loadingProvider.notifier).state = false;
                 }
               },
-              onTap: () => context.push("/forget-password"),
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgetPasswordPage())),
+              onTap: () => context.go("/forget-password"),
               color: AppColors.primaryLightColor,
               validate: true,
               isLogin: true,

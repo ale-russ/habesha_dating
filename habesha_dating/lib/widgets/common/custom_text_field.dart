@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,12 +13,16 @@ class CustomTextForm extends ConsumerWidget {
     required this.labelText,
     required this.onChanged,
     this.obscureText = false,
+    this.isPassword = false,
+    this.onIconTap,
   });
 
   final TextEditingController controller;
   final String labelText;
   final bool obscureText;
   final ValueChanged<String>? onChanged;
+  final bool isPassword;
+  final void Function()? onIconTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,8 +41,19 @@ class CustomTextForm extends ConsumerWidget {
         obscureText: obscureText,
         controller: controller,
         decoration: InputDecoration(
-          labelText: labelText,
-        ),
+            labelText: labelText,
+            suffixIcon: isPassword
+                ? IconButton(
+                    onPressed: onIconTap ?? () {},
+                    icon: Icon(
+                      obscureText
+                          ? CupertinoIcons.lock
+                          : CupertinoIcons.lock_open,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.tertiary,
+                    ),
+                  )
+                : const SizedBox.shrink()),
       ),
     );
   }

@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../providers/loading_provider.dart';
+import '../../providers/lock_icon_provider.dart';
 import '../../widgets/common/loader.dart';
 import '/utils/image_picker.dart';
 import '/providers/auth/auth_provider.dart';
@@ -45,13 +46,23 @@ class SignupPageState extends ConsumerState<SignupPage> {
   TextEditingController? confirmPasswordController = TextEditingController();
   TextEditingController? nameController = TextEditingController();
 
+  @override
+  void dispose() {
+    emailController!.dispose();
+    passwordController!.dispose();
+    confirmPasswordController!.dispose();
+    nameController!.dispose();
+    super.dispose();
+  }
+
   void _pickImage(WidgetRef ref) async {
     if (kIsWeb) {
+      log("TRUE");
       final pickedImage = await pickedImageWeb();
+
       if (pickedImage != null) {
-        setState(() {
-          _imageBytes = pickedImage;
-        });
+        _imageBytes = pickedImage;
+        setState(() {});
       }
     } else {
       final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -61,17 +72,17 @@ class SignupPageState extends ConsumerState<SignupPage> {
         log("GalleryFile: $imgFile");
         _imageBytes = await imgFile!.readAsBytes();
       } else {
-        log("Opps something went wrong");
+        log("OOps something went wrong");
       }
       setState(() {});
-
-      ref.read(profileImageProvider.notifier).state = _imageBytes;
     }
+    ref.read(profileImageProvider.notifier).state = _imageBytes;
   }
 
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeProvider);
+    final iconLock = ref.watch(iconLockProvider);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -107,14 +118,20 @@ class SignupPageState extends ConsumerState<SignupPage> {
               CustomTextForm(
                 controller: passwordController!,
                 labelText: 'Password',
-                obscureText: true,
+                obscureText: iconLock ? true : false,
+                isPassword: true,
+                onIconTap: () =>
+                    ref.read(iconLockProvider.notifier).state = !iconLock,
                 onChanged: (text) =>
                     ref.read(passwordProvider.notifier).state = text,
               ),
               CustomTextForm(
                 controller: confirmPasswordController!,
                 labelText: 'Confirm Password',
-                obscureText: true,
+                obscureText: iconLock ? true : false,
+                isPassword: true,
+                onIconTap: () =>
+                    ref.read(iconLockProvider.notifier).state = !iconLock,
                 onChanged: (text) =>
                     ref.read(confirmPasswordProvider.notifier).state = text,
               ),
@@ -191,7 +208,7 @@ class SignupPageState extends ConsumerState<SignupPage> {
                     ref.read(loadingProvider.notifier).state = false;
                   }
                 },
-                onTap: () => context.push("/login"),
+                onTap: () => context.go("/login"),
                 color: AppColors.primaryLightColor,
                 validate: true,
                 isLogin: false,

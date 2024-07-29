@@ -2,13 +2,12 @@
 
 import 'dart:async';
 import 'dart:developer';
-import 'dart:typed_data';
-import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habesha_dating/providers/auth/form_validation_provider.dart';
+// import 'package:habesha_dating/providers/auth/form_validation_provider.dart';
 import 'package:habesha_dating/providers/theme/theme_provider.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +24,7 @@ final authProvider =
 class AuthNotifier extends AsyncNotifier<bool> {
   @override
   FutureOr<bool> build() async {
-    _checkIfFbLoggedIn();
+    if (!kIsWeb) _checkIfFbLoggedIn();
     return isAuthenticated ?? false;
   }
 

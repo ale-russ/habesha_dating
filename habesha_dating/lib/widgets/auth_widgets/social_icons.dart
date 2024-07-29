@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -17,9 +18,8 @@ class SocialIcons extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SocialButtons(
-          onTap: () {
-            ref.watch(authProvider.notifier).fbLogIn();
-          },
+          onTap: () =>
+              kIsWeb ? () {} : ref.watch(authProvider.notifier).fbLogIn(),
           child: const Icon(
             Icons.facebook,
             color: Colors.blue,
